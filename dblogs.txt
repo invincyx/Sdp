@@ -1,0 +1,5 @@
+Date: 2024-06-12T11:47:50.222Z Error: {"message":"read ECONNRESET","code":"ECONNRESET","errno":-54}
+Date: 2024-06-12T12:03:17.260Z Error: {"message":"read ECONNRESET","code":"ECONNRESET","errno":-54}
+Date: 2024-06-12T12:55:43.533Z Error: {"message":"read ECONNRESET","code":"ECONNRESET","errno":-54}
+Date: 2024-06-12T13:18:22.296Z Error: {"message":"read ECONNRESET","code":"ECONNRESET","errno":-54}
+Date: 2024-06-12T13:37:13.212Z Error: {"message":"Connection lost: The server closed the connection.","code":"PROTOCOL_CONNECTION_LOST"}
