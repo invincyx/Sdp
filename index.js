@@ -95,16 +95,18 @@ app.post("/billing-notification", async (req, res) => {
       in_time_stamp
     ]);
 
-    // Send the response
-    res.json({ errorCode: 7, errorText: "PRAYER_7#PRY" });
+    // Handle the output parameters
+    const { errorCode, errorText } = rows[0];
+    console.log(`Procedure output: errorCode = ${errorCode}, errorText = ${errorText}`);
+
+    res.json({ message: "Billing notification processed successfully" });
   } catch (error) {
     console.error(error);
 
     // Log the error
-    const errorLog = `Error: ${error.message}\n`;
-    await appendFile('errorLogs.txt', errorLog);
+    await appendFile('errorLogs.txt', `Date: ${new Date().toISOString()} Error: ${JSON.stringify(error)}\n`);
 
-    res.status(500).json({ message: "Failed to call DB procedure", error: error.message });
+    res.json({ message: "Failed to process billing notification", error: error.message });
   }
 });
 
@@ -118,29 +120,31 @@ async function pollDatabase() {
         console.log(row.message); 
         console.log(Math.floor(row.sender));
 
-        const featureId = row.message === "ACTIVATE" ? "ACTIVATION" : "DEACTIVATION";         
+        const featureId = row.message === "ACTIVATE" ? "ACTIVATION" : "DEACTIVATION"; 
 
         try {
-          const hitSdp = await hitSDP({token: token.access_token, request: featureId, requestId: Math.floor(row.trans_id), msisdn: Math.floor(row.sender) })
+          const hitSdp = await hitSDP({token: token.access_token, request: featureId, requestId: Math.floor(row.trans_id_in), msisdn: Math.floor(row.receiver) })
           console.log(hitSdp);
 
+          // Log the billing hit
+          await fs.appendFile('billingHits.txt', `Date: ${new Date().toISOString()} Billing Hit: ${JSON.stringify(hitSdp)}\n`);
+
           // Update status to success value (11)
-          await database.query("UPDATE transactions SET status = ? WHERE id = ?", [11, row.id]);
+          await database.query("CALL SDP_Response(?, ?, ?)", [row.trans_id_in, row.receiver, '11']);
         } catch (error) {
           console.error(error);
 
+          // Log the error
+          await fs.appendFile('errorLogs.txt', `Date: ${new Date().toISOString()} Error: ${JSON.stringify(error)}\n`);
+
           // Update status to failure value (2)
-          await database.query("UPDATE transactions SET status = ? WHERE id = ?", [2, row.id]);
+          await database.query("CALL SDP_Response(?, ?, ?)", [row.trans_id_in, row.receiver, '2']);
         }
       }
-      return { message: "Connection successful, status 88 found", data: rows };
-    } else {
-      return { message: "Connection successful, status 88 not found" };
     }
   } catch (error) { 
     const date = new Date();
     await appendFile('dblogs.txt', `Date: ${date.toISOString()} Error: ${JSON.stringify(error)}\n`);
-    return { message: "Connection failed", error: error.message };
   }
 }
 
