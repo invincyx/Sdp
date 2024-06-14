@@ -48,11 +48,12 @@ app.get("/test-connection", async (req, res) => {
       if (rows.length > 0) {
         for (const row of rows) {
           console.log(row.message); 
-          console.log(Math.floor(row.sender));
+  
   
           const featureId = row.message === "ACTIVATE" ? "ACTIVATION" : "DEACTIVATION"; 
   
           try {
+            console.log("Trying to hit SDP...🍀");
             const hitSdp = await hitSDP({token: "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTaGFua2x5MTM1IiwiYXVkIjoiQSIsInNjb3BlcyI6IkFETUlOIiwiZW50aXR5SWQiOiIiLCJpc3MiOiJodHRwOi8vc2l4ZGVlLmNvbSIsImlhdCI6MTcxODM3MjUwNywiZXhwIjoxNzE4Mzc4NTA3fQ.FUqtvsYsLnsdDxCMlmWjIhvaYUDwii6RHMA_OgJ-kIaznmdT7-IBdRyuSN67H_Qe6rhm1kXZszgU6c3hLUohNA", request: featureId, requestId: Math.floor(row.trans_id), msisdn: Math.floor(row.receiver), planId: row.P_Code })
             console.log(hitSdp);
   
@@ -61,6 +62,8 @@ app.get("/test-connection", async (req, res) => {
   
             // Update status based on the result code
             const resultCode = hitSdp.resultCode === "0" ? '11' : hitSdp.resultCode;
+
+            console.log("🍀 Result code: ", resultCode);
   
             // Declare the output variable
             await database.query("SET @output = ''");
@@ -72,7 +75,10 @@ app.get("/test-connection", async (req, res) => {
             const result = await database.query("SELECT @output as output");
             console.log(result[0].output);
           } catch (error) {
+            console.log("🍀 Error: ", error);
             console.error(error);
+
+            
   
             // Log the error
             await fs.appendFile('errorLogs.txt', `Date: ${new Date().toISOString()} Error: ${JSON.stringify(error)}\n`);
@@ -93,6 +99,7 @@ app.get("/test-connection", async (req, res) => {
       }
     } catch (error) { 
       const date = new Date();
+      console.log("🍀 Error Catch Block: ", error);
       await appendFile('dblogs.txt', `Date: ${date.toISOString()} Error: ${JSON.stringify(error)}\n`);
     }
   }
