@@ -53,7 +53,7 @@ async function pollDatabase() {
         const featureId = row.message === "ACTIVATE" ? "ACTIVATION" : "DEACTIVATION"; 
 
         try {
-          const hitSdp = await hitSDP({token: "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTaGFua2x5MTM1IiwiYXVkIjoiQSIsInNjb3BlcyI6IkFETUlOIiwiZW50aXR5SWQiOiIiLCJpc3MiOiJodHRwOi8vc2l4ZGVlLmNvbSIsImlhdCI6MTcxODM2NjQ3OSwiZXhwIjoxNzE4MzcyNDc5fQ.xkEIuZIRilU1LCQa4gtyy7xC2wTqM91QTfBi5S2InfLhuizv6dI52ypGHkLcaDIgrcrybvxWFIeu_eOWPqmsJw", request: featureId, requestId: Math.floor(row.trans_id_in), msisdn: Math.floor(row.receiver), planId: row.P_Code })
+          const hitSdp = await hitSDP({token: "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTaGFua2x5MTM1IiwiYXVkIjoiQSIsInNjb3BlcyI6IkFETUlOIiwiZW50aXR5SWQiOiIiLCJpc3MiOiJodHRwOi8vc2l4ZGVlLmNvbSIsImlhdCI6MTcxODM2NjQ3OSwiZXhwIjoxNzE4MzcyNDc5fQ.xkEIuZIRilU1LCQa4gtyy7xC2wTqM91QTfBi5S2InfLhuizv6dI52ypGHkLcaDIgrcrybvxWFIeu_eOWPqmsJw", request: featureId, requestId: Math.floor(row.trans_id), msisdn: Math.floor(row.receiver), planId: row.P_Code })
           console.log(hitSdp);
 
           // Log the billing hit
