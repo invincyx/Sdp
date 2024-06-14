@@ -25,7 +25,7 @@ export async function getToken() {
   };
 
   try {
-    const data  = await fetch("https://10.10.11.162:9480/token/", requestOptions);
+    const data  = await fetch("http://10.10.11.162:9480/token/", requestOptions);
     const response = await data.json();
 
     // Store the token and its expiration time
