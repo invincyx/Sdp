@@ -61,7 +61,7 @@ async function pollDatabase() {
 
           // Update status based on the result code
           const resultCode = hitSdp.resultCode === "0" ? '11' : hitSdp.resultCode;
-          await database.query("CALL SDP_Response(?, ?, ?, ?)", [row.trans_id_in, row.receiver, resultCode, additionalParam]);
+          await database.query("CALL SDP_Response(?, ?, ?)", [row.trans_id_in, row.receiver, resultCode]);
         } catch (error) {
           console.error(error);
 
@@ -69,8 +69,7 @@ async function pollDatabase() {
           await fs.appendFile('errorLogs.txt', `Date: ${new Date().toISOString()} Error: ${JSON.stringify(error)}\n`);
 
           // Update status to failure value (2)
-          await database.query("CALL SDP_Response(?, ?, ?, ?)", [row.trans_id_in, row.receiver, '2', additionalParam]);
-        }
+          await database.query("CALL SDP_Response(?, ?, ?)", [row.trans_id_in, row.receiver, '2']);        }
       }
     }
   } catch (error) { 
