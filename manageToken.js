@@ -22,19 +22,25 @@ export async function getToken() {
     headers: myHeaders,
     body: urlencoded,
     redirect: "follow"
-  };
+};
 
-  try {
+try {
     const data  = await fetch("http://10.10.11.162:9480/token/", requestOptions);
-    const response = await data.json();
+    
+    if (data.headers.get('Content-Type').includes('application/json')) {
+        const response = await data.json();
 
-    // Store the token and its expiration time
-    token = response;
-    tokenExpiration = new Date(currentTime.getTime() + response.expires_in * 1000);
+        // Store the token and its expiration time
+        token = response;
+        tokenExpiration = new Date(currentTime.getTime() + response.expires_in * 1000);
 
-    return response;
-  } catch (error) {
+        return response;
+    } else {
+        console.error('Expected JSON but received', await data.text());
+        throw new Error('Expected JSON');
+    }
+} catch (error) {
     console.error('Error:', error);
     throw error;
-  }
+}
 }
