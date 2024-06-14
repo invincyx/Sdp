@@ -38,45 +38,64 @@ app.get("/test-connection", async (req, res) => {
 
 
 
-async function pollDatabase() {
-  // const token = await getToken();
-  console.log("Poll Database running...");
-  try {
-    const [rows] = await database.query("SELECT * FROM sdp_request WHERE status = ? LIMIT 100", [11]);
-    console.log("Row length: ", rows.length); 
-    console.log(rows);
-    if (rows.length > 0) {
-      for (const row of rows) {
-        console.log(row.message); 
-        console.log(Math.floor(row.sender));
-
-        const featureId = row.message === "ACTIVATE" ? "ACTIVATION" : "DEACTIVATION"; 
-
-        try {
-          const hitSdp = await hitSDP({token: "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTaGFua2x5MTM1IiwiYXVkIjoiQSIsInNjb3BlcyI6IkFETUlOIiwiZW50aXR5SWQiOiIiLCJpc3MiOiJodHRwOi8vc2l4ZGVlLmNvbSIsImlhdCI6MTcxODM2NjQ3OSwiZXhwIjoxNzE4MzcyNDc5fQ.xkEIuZIRilU1LCQa4gtyy7xC2wTqM91QTfBi5S2InfLhuizv6dI52ypGHkLcaDIgrcrybvxWFIeu_eOWPqmsJw", request: featureId, requestId: Math.floor(row.trans_id), msisdn: Math.floor(row.receiver), planId: row.P_Code })
-          console.log(hitSdp);
-
-          // Log the billing hit
-          // await fs.appendFile('billingHits.txt', `Date: ${new Date().toISOString()} Billing Hit: ${JSON.stringify(hitSdp)}\n`);
-
-          // Update status based on the result code
-          const resultCode = hitSdp.resultCode === "0" ? '11' : hitSdp.resultCode;
-          await database.query("CALL SDP_Response(?, ?, ?)", [row.trans_id_in, row.receiver, resultCode]);
-        } catch (error) {
-          console.error(error);
-
-          // Log the error
-          await fs.appendFile('errorLogs.txt', `Date: ${new Date().toISOString()} Error: ${JSON.stringify(error)}\n`);
-
-          // Update status to failure value (2)
-          await database.query("CALL SDP_Response(?, ?, ?)", [row.trans_id_in, row.receiver, '2']);        }
+  async function pollDatabase() {
+    // const token = await getToken();
+    console.log("Poll Database running...");
+    try {
+      const [rows] = await database.query("SELECT * FROM sdp_request WHERE status = ? LIMIT 100", [11]);
+      console.log("Row length: ", rows.length); 
+      console.log(rows);
+      if (rows.length > 0) {
+        for (const row of rows) {
+          console.log(row.message); 
+          console.log(Math.floor(row.sender));
+  
+          const featureId = row.message === "ACTIVATE" ? "ACTIVATION" : "DEACTIVATION"; 
+  
+          try {
+            const hitSdp = await hitSDP({token: "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTaGFua2x5MTM1IiwiYXVkIjoiQSIsInNjb3BlcyI6IkFETUlOIiwiZW50aXR5SWQiOiIiLCJpc3MiOiJodHRwOi8vc2l4ZGVlLmNvbSIsImlhdCI6MTcxODM2NjQ3OSwiZXhwIjoxNzE4MzcyNDc5fQ.xkEIuZIRilU1LCQa4gtyy7xC2wTqM91QTfBi5S2InfLhuizv6dI52ypGHkLcaDIgrcrybvxWFIeu_eOWPqmsJw", request: featureId, requestId: Math.floor(row.trans_id), msisdn: Math.floor(row.receiver), planId: row.P_Code })
+            console.log(hitSdp);
+  
+            // Log the billing hit
+            // await fs.appendFile('billingHits.txt', `Date: ${new Date().toISOString()} Billing Hit: ${JSON.stringify(hitSdp)}\n`);
+  
+            // Update status based on the result code
+            const resultCode = hitSdp.resultCode === "0" ? '11' : hitSdp.resultCode;
+  
+            // Declare the output variable
+            await database.query("SET @output = ''");
+  
+            // Pass the output variable to the procedure
+            await database.query("CALL SDP_Response(?, ?, ?, @output)", [row.trans_id_in, row.receiver, resultCode]);
+  
+            // Get the output value
+            const result = await database.query("SELECT @output as output");
+            console.log(result[0].output);
+          } catch (error) {
+            console.error(error);
+  
+            // Log the error
+            await fs.appendFile('errorLogs.txt', `Date: ${new Date().toISOString()} Error: ${JSON.stringify(error)}\n`);
+  
+            // Update status to failure value (2)
+  
+            // Declare the output variable
+            await database.query("SET @output = ''");
+  
+            // Pass the output variable to the procedure
+            await database.query("CALL SDP_Response(?, ?, ?, @output)", [row.trans_id_in, row.receiver, '2']);
+  
+            // Get the output value
+            const result = await database.query("SELECT @output as output");
+            console.log(result[0].output);
+          }
+        }
       }
+    } catch (error) { 
+      const date = new Date();
+      await appendFile('dblogs.txt', `Date: ${date.toISOString()} Error: ${JSON.stringify(error)}\n`);
     }
-  } catch (error) { 
-    const date = new Date();
-    await appendFile('dblogs.txt', `Date: ${date.toISOString()} Error: ${JSON.stringify(error)}\n`);
   }
-}
 
 setInterval(pollDatabase, 10000);
 
