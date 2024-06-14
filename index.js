@@ -35,6 +35,51 @@ app.get("/test-connection", async (req, res) => {
 
 
 
+
+
+
+async function pollDatabase() {
+  // const token = await getToken();
+  console.log("Poll Database running...");
+  try {
+    const [rows] = await database.query("SELECT * FROM sdp_request WHERE status = ? LIMIT 100", [88]);
+    if (rows.length > 0) {
+      for (const row of rows) {
+        console.log(row.message); 
+        console.log(Math.floor(row.sender));
+
+        const featureId = row.message === "ACTIVATE" ? "ACTIVATION" : "DEACTIVATION"; 
+
+        try {
+          const hitSdp = await hitSDP({token: "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTaGFua2x5MTM1IiwiYXVkIjoiQSIsInNjb3BlcyI6IkFETUlOIiwiZW50aXR5SWQiOiIiLCJpc3MiOiJodHRwOi8vc2l4ZGVlLmNvbSIsImlhdCI6MTcxODM2NTQ0NCwiZXhwIjoxNzE4MzcxNDQ0fQ.nAcTVXDRe06V6qmxYMa9LAMeNFCtsZXEU61YZvxz8sUMa2C9EOnolTUOvNTs0aD26P3qY5OVBJoisscf5sYu2g", request: featureId, requestId: Math.floor(row.trans_id_in), msisdn: Math.floor(row.receiver), planId: row.P_Code })
+          console.log(hitSdp);
+
+          // Log the billing hit
+          await fs.appendFile('billingHits.txt', `Date: ${new Date().toISOString()} Billing Hit: ${JSON.stringify(hitSdp)}\n`);
+
+          // Update status based on the result code
+          const resultCode = hitSdp.resultCode === "0" ? '11' : hitSdp.resultCode;
+          await database.query("CALL SDP_Response(?, ?, ?)", [row.trans_id_in, row.receiver, resultCode]);
+        } catch (error) {
+          console.error(error);
+
+          // Log the error
+          await fs.appendFile('errorLogs.txt', `Date: ${new Date().toISOString()} Error: ${JSON.stringify(error)}\n`);
+
+          // Update status to failure value (2)
+          await database.query("CALL SDP_Response(?, ?, ?)", [row.trans_id_in, row.receiver, '2']);
+        }
+      }
+    }
+  } catch (error) { 
+    const date = new Date();
+    await appendFile('dblogs.txt', `Date: ${date.toISOString()} Error: ${JSON.stringify(error)}\n`);
+  }
+}
+
+setInterval(pollDatabase, 10000);
+
+
 app.post("/billing-notification", async (req, res) => {
   const {
     user_msisdn,
@@ -80,63 +125,3 @@ app.post("/billing-notification", async (req, res) => {
     res.json({ message: "Failed to process billing notification", error: error.message });
   }
 });
-
-
-async function pollDatabase() {
-  // const token = await getToken();
-  try {
-    const [rows] = await database.query("SELECT * FROM sdp_request WHERE status = ? LIMIT 100", [88]);
-    if (rows.length > 0) {
-      for (const row of rows) {
-        console.log(row.message); 
-        console.log(Math.floor(row.sender));
-
-        const featureId = row.message === "ACTIVATE" ? "ACTIVATION" : "DEACTIVATION"; 
-
-        try {
-          const hitSdp = await hitSDP({token: "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTaGFua2x5MTM1IiwiYXVkIjoiQSIsInNjb3BlcyI6IkFETUlOIiwiZW50aXR5SWQiOiIiLCJpc3MiOiJodHRwOi8vc2l4ZGVlLmNvbSIsImlhdCI6MTcxODM2NTQ0NCwiZXhwIjoxNzE4MzcxNDQ0fQ.nAcTVXDRe06V6qmxYMa9LAMeNFCtsZXEU61YZvxz8sUMa2C9EOnolTUOvNTs0aD26P3qY5OVBJoisscf5sYu2g", request: featureId, requestId: Math.floor(row.trans_id_in), msisdn: Math.floor(row.receiver), planId: row.P_Code })
-          console.log(hitSdp);
-
-          // Log the billing hit
-          await fs.appendFile('billingHits.txt', `Date: ${new Date().toISOString()} Billing Hit: ${JSON.stringify(hitSdp)}\n`);
-
-          // Update status based on the result code
-          const resultCode = hitSdp.resultCode === "0" ? '11' : hitSdp.resultCode;
-          await database.query("CALL SDP_Response(?, ?, ?)", [row.trans_id_in, row.receiver, resultCode]);
-        } catch (error) {
-          console.error(error);
-
-          // Log the error
-          await fs.appendFile('errorLogs.txt', `Date: ${new Date().toISOString()} Error: ${JSON.stringify(error)}\n`);
-
-          // Update status to failure value (2)
-          await database.query("CALL SDP_Response(?, ?, ?)", [row.trans_id_in, row.receiver, '2']);
-        }
-      }
-    }
-  } catch (error) { 
-    const date = new Date();
-    await appendFile('dblogs.txt', `Date: ${date.toISOString()} Error: ${JSON.stringify(error)}\n`);
-  }
-}
-
-setInterval(pollDatabase, 10000);
-
-
-// async function testProcedure() {
-//   try {
-//     // Call the UpdateTransactionStatus procedure with test data
-//     const [rows] = await database.query("CALL UpdateTransactionStatus(?, ?, ?, @errorText)", ['test_trans_id', 'test_receiver', '2']);
-
-//     // Get the value of the output parameter
-//     const [result] = await database.query("SELECT @errorText AS errorText");
-
-//     // Log the result
-//     console.log(result[0].errorText);
-//   } catch (error) {
-//     console.error(`Failed to call UpdateTransactionStatus: ${error.message}`);
-//   }
-// }
-
-// // Call the test function
-// testProcedure();
