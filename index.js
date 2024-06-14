@@ -57,7 +57,7 @@ async function pollDatabase() {
           console.log(hitSdp);
 
           // Log the billing hit
-          await fs.appendFile('billingHits.txt', `Date: ${new Date().toISOString()} Billing Hit: ${JSON.stringify(hitSdp)}\n`);
+          // await fs.appendFile('billingHits.txt', `Date: ${new Date().toISOString()} Billing Hit: ${JSON.stringify(hitSdp)}\n`);
 
           // Update status based on the result code
           const resultCode = hitSdp.resultCode === "0" ? '11' : hitSdp.resultCode;
