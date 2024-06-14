@@ -1,2 +1,0 @@
-Error: PROCEDURE litfiles_sdp.log_billing_notification does not exist
-Error: PROCEDURE litfiles_sdp.log_billing_notification does not exist

@@ -3,7 +3,7 @@ import { promisify } from 'util';
 
 const appendFile = promisify(fs.appendFile);
 
-export async function hitSDP({token, request, requestId, msisdn} ) {
+export async function hitSDP({token, request, requestId, msisdn, planId} ) {
 
     const myHeaders = new Headers();
     myHeaders.append("X-Authorization", `Bearer ${token}`);
@@ -25,7 +25,7 @@ export async function hitSDP({token, request, requestId, msisdn} ) {
       "password": "Password",
       "externalServiceId": msisdn,
       "requestParam": {
-        "planId": "9913510003",
+        "planId": planId,
         "cpId": "135"
       }
     });
@@ -40,7 +40,7 @@ export async function hitSDP({token, request, requestId, msisdn} ) {
     
     const isoDate = date.toISOString();
     try {
-        const data = await fetch("https://sdp.api.econet.co.zw:9480/APIGateway/api/public/SMACT/Activation", requestOptions,{ timeout: 5000 })
+        const data = await fetch(`https://sdp.api.econet.co.zw:9480/APIGateway/api/public/SMACT/${request}`, requestOptions,{ timeout: 5000 })
         const response = await data.json()
         const date = new Date().toISOString();
         await appendFile('sdplogs.txt', `Date: ${isoDate} Request: ${JSON.stringify(raw)}\n`);
@@ -48,7 +48,7 @@ export async function hitSDP({token, request, requestId, msisdn} ) {
         return response;
     } catch (error) {
         console.error('Error:', error);
-        await appendFile('log.txt', `Date: ${isoDate} Error: ${JSON.stringify(error)}\n`);
+        await appendFile('sdplogs.txt', `Date: ${isoDate} Error: ${JSON.stringify(error)}\n`);
         return { error: 'Request timed out' };
     }
 

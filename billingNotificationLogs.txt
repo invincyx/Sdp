@@ -1,2 +1,0 @@
-Billing Notification: {"user_msisdn":1234567890,"user_product_code":"product123","in_life_cycle":"active","in_chargin_type":"prepaid","in_next_renew_date":"2022-12-31","in_fee":10.5,"in_reason":"regular charge","in_channel_id":"channel123","in_time_stamp":"2022-01-01T00:00:00Z"}
-Billing Notification: {"user_msisdn":1234567890,"user_product_code":"product123","in_life_cycle":"active","in_chargin_type":"prepaid","in_next_renew_date":"2022-12-31","in_fee":10.5,"in_reason":"regular charge","in_channel_id":"channel123","in_time_stamp":"2022-01-01T00:00:00Z"}
