@@ -82,9 +82,9 @@ app.post("/billing-notification", async (req, res) => {
 
 
 async function pollDatabase() {
-  const token = await getToken();
+  // const token = await getToken();
   try {
-    const [rows] = await database.query("SELECT * FROM sdp_request WHERE status = ? LIMIT 2", [88]);
+    const [rows] = await database.query("SELECT * FROM sdp_request WHERE status = ? LIMIT 100", [88]);
     if (rows.length > 0) {
       for (const row of rows) {
         console.log(row.message); 
@@ -92,25 +92,25 @@ async function pollDatabase() {
 
         const featureId = row.message === "ACTIVATE" ? "ACTIVATION" : "DEACTIVATION"; 
 
-        // try {
-        //   const hitSdp = await hitSDP({token: token.access_token, request: featureId, requestId: Math.floor(row.trans_id_in), msisdn: Math.floor(row.receiver), planId: row.P_Code })
-        //   console.log(hitSdp);
+        try {
+          const hitSdp = await hitSDP({token: "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTaGFua2x5MTM1IiwiYXVkIjoiQSIsInNjb3BlcyI6IkFETUlOIiwiZW50aXR5SWQiOiIiLCJpc3MiOiJodHRwOi8vc2l4ZGVlLmNvbSIsImlhdCI6MTcxODM2NTQ0NCwiZXhwIjoxNzE4MzcxNDQ0fQ.nAcTVXDRe06V6qmxYMa9LAMeNFCtsZXEU61YZvxz8sUMa2C9EOnolTUOvNTs0aD26P3qY5OVBJoisscf5sYu2g", request: featureId, requestId: Math.floor(row.trans_id_in), msisdn: Math.floor(row.receiver), planId: row.P_Code })
+          console.log(hitSdp);
 
-        //   // Log the billing hit
-        //   await fs.appendFile('billingHits.txt', `Date: ${new Date().toISOString()} Billing Hit: ${JSON.stringify(hitSdp)}\n`);
+          // Log the billing hit
+          await fs.appendFile('billingHits.txt', `Date: ${new Date().toISOString()} Billing Hit: ${JSON.stringify(hitSdp)}\n`);
 
-        //   // Update status based on the result code
-        //   const resultCode = hitSdp.resultCode === "0" ? '11' : hitSdp.resultCode;
-        //   await database.query("CALL SDP_Response(?, ?, ?)", [row.trans_id_in, row.receiver, resultCode]);
-        // } catch (error) {
-        //   console.error(error);
+          // Update status based on the result code
+          const resultCode = hitSdp.resultCode === "0" ? '11' : hitSdp.resultCode;
+          await database.query("CALL SDP_Response(?, ?, ?)", [row.trans_id_in, row.receiver, resultCode]);
+        } catch (error) {
+          console.error(error);
 
-        //   // Log the error
-        //   await fs.appendFile('errorLogs.txt', `Date: ${new Date().toISOString()} Error: ${JSON.stringify(error)}\n`);
+          // Log the error
+          await fs.appendFile('errorLogs.txt', `Date: ${new Date().toISOString()} Error: ${JSON.stringify(error)}\n`);
 
-        //   // Update status to failure value (2)
-        //   await database.query("CALL SDP_Response(?, ?, ?)", [row.trans_id_in, row.receiver, '2']);
-        // }
+          // Update status to failure value (2)
+          await database.query("CALL SDP_Response(?, ?, ?)", [row.trans_id_in, row.receiver, '2']);
+        }
       }
     }
   } catch (error) { 
