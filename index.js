@@ -18,6 +18,7 @@ app.listen(port, () => {
     console.log(`Server started on ${port}`);
 });
 
+console.log("Server started: First log here ");
 
 // Test connection
 app.get("/test-connection", async (req, res) => {
