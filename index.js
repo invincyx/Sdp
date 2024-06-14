@@ -1,6 +1,6 @@
 import express from "express";
 import database from "./database.js";
-// import { getToken } from "./manageToken.js";
+import { getToken } from "./manageToken.js";
 // import { hitSDP } from "./hitSdp.js";
 
 import fs from 'fs';
@@ -82,7 +82,7 @@ app.post("/billing-notification", async (req, res) => {
 
 
 async function pollDatabase() {
-  // const token = await getToken();
+  const token = await getToken();
   try {
     const [rows] = await database.query("SELECT * FROM sdp_request WHERE status = ? LIMIT 2", [88]);
     if (rows.length > 0) {
