@@ -42,7 +42,7 @@ async function pollDatabase() {
   // const token = await getToken();
   console.log("Poll Database running...");
   try {
-    const [rows] = await database.query("SELECT * FROM sdp_request WHERE status = ? LIMIT 100", [88]);
+    const [rows] = await database.query("SELECT * FROM sdp_request WHERE status = ? LIMIT 100", [11]);
     console.log("Row length: ", rows.length); 
     console.log(rows);
     if (rows.length > 0) {
