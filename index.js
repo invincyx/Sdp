@@ -1,7 +1,7 @@
 import express from "express";
 import database from "./database.js";
 import { getToken } from "./manageToken.js";
-import { hitSDP } from "./hitSdp.js";
+// import { hitSDP } from "./hitSdp.js";
 
 import fs from 'fs';
 import { promisify } from 'util';
