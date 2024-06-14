@@ -122,20 +122,20 @@ async function pollDatabase() {
 setInterval(pollDatabase, 10000);
 
 
-async function testProcedure() {
-  try {
-    // Call the UpdateTransactionStatus procedure with test data
-    const [rows] = await database.query("CALL UpdateTransactionStatus(?, ?, ?, @errorText)", ['test_trans_id', 'test_receiver', '2']);
+// async function testProcedure() {
+//   try {
+//     // Call the UpdateTransactionStatus procedure with test data
+//     const [rows] = await database.query("CALL UpdateTransactionStatus(?, ?, ?, @errorText)", ['test_trans_id', 'test_receiver', '2']);
 
-    // Get the value of the output parameter
-    const [result] = await database.query("SELECT @errorText AS errorText");
+//     // Get the value of the output parameter
+//     const [result] = await database.query("SELECT @errorText AS errorText");
 
-    // Log the result
-    console.log(result[0].errorText);
-  } catch (error) {
-    console.error(`Failed to call UpdateTransactionStatus: ${error.message}`);
-  }
-}
+//     // Log the result
+//     console.log(result[0].errorText);
+//   } catch (error) {
+//     console.error(`Failed to call UpdateTransactionStatus: ${error.message}`);
+//   }
+// }
 
-// Call the test function
-testProcedure();
+// // Call the test function
+// testProcedure();

@@ -40,7 +40,7 @@ export async function hitSDP({token, request, requestId, msisdn, planId} ) {
     
     const isoDate = date.toISOString();
     try {
-        const data = await fetch(`https://sdp.api.econet.co.zw:9480/APIGateway/api/public/SMACT/${request}`, requestOptions,{ timeout: 5000 })
+        const data = await fetch(`https://10.10.11.162:9480/APIGateway/api/public/SMACT/${request}`, requestOptions,{ timeout: 5000 })
         const response = await data.json()
         const date = new Date().toISOString();
         await appendFile('sdplogs.txt', `Date: ${isoDate} Request: ${JSON.stringify(raw)}\n`);
