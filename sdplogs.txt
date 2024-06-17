@@ -1,0 +1,36 @@
+Date: 2024-06-17T19:09:02.822Z Error: {}
+Date: 2024-06-17T19:09:35.571Z Error: {}
+Date: 2024-06-17T19:14:53.755Z Error: {}
+Date: 2024-06-17T19:15:15.477Z Error: {}
+Date: 2024-06-17T19:16:26.736Z Request: "{\"requestId\":\"123\",\"requestTimeStamp\":\"2024-06-17 19:16:26\",\"channel\":\"2\",\"sourceNode\":\"SourceNode\",\"sourceAddress\":\"SourceAddress\",\"featureId\":\"Deactivation\",\"username\":\"UserName\",\"password\":\"Password\",\"externalServiceId\":\"263774599141\",\"requestParam\":{\"planId\":\"9913510095\",\"cpId\":\"135\"}}"
+Date: 2024-06-17T19:16:26.736Z Response: {}
+Date: 2024-06-17T19:16:52.996Z Request: "{\"requestId\":\"123\",\"requestTimeStamp\":\"2024-06-17 19:16:52\",\"channel\":\"2\",\"sourceNode\":\"SourceNode\",\"sourceAddress\":\"SourceAddress\",\"featureId\":\"Activation\",\"username\":\"UserName\",\"password\":\"Password\",\"externalServiceId\":\"263774599141\",\"requestParam\":{\"planId\":\"9913510095\",\"cpId\":\"135\"}}"
+Date: 2024-06-17T19:16:52.996Z Response: {"requestId":"123","responseId":"a724130550037717","requestTimeStamp":"2024-06-17 19:16:52","responseTimeStamp":"2024-06-17 21:17:53","resultCode":"0","featureId":"ACTIVATION","resultParam":{"resultCode":"0","resultDescription":"Activation Success","planId":"9913510095"}}
+Date: 2024-06-17T19:17:27.109Z Error: {}
+Date: 2024-06-17T19:20:06.822Z Error: {}
+Date: 2024-06-17T19:20:23.002Z Error: {}
+Date: 2024-06-17T19:23:22.806Z Error: {}
+Date: 2024-06-17T19:23:54.977Z Error: {}
+Date: 2024-06-17T19:24:33.296Z Error: {}
+Date: 2024-06-17T19:25:02.714Z Request: "{\"requestId\":\"123\",\"requestTimeStamp\":\"2024-06-17 19:25:02\",\"channel\":\"2\",\"sourceNode\":\"SourceNode\",\"sourceAddress\":\"SourceAddress\",\"featureId\":\"Activation\",\"username\":\"UserName\",\"password\":\"Password\",\"externalServiceId\":\"263774599141\",\"requestParam\":{\"planId\":\"9913510095\",\"cpId\":\"135\"}}"
+Date: 2024-06-17T19:25:02.714Z Response: {"requestId":"123","responseId":"a728489912264716","requestTimeStamp":"2024-06-17 19:25:02","responseTimeStamp":"2024-06-17 21:25:29","resultCode":"1","featureId":"ACTIVATION","resultParam":{"resultCode":"9","resultDescription":"Subscription Already Exists","planId":"9913510095"}}
+Date: 2024-06-17T19:26:09.235Z Request: "{\"requestId\":\"123\",\"requestTimeStamp\":\"2024-06-17 19:26:09\",\"channel\":\"2\",\"sourceNode\":\"SourceNode\",\"sourceAddress\":\"SourceAddress\",\"featureId\":\"Activation\",\"username\":\"UserName\",\"password\":\"Password\",\"externalServiceId\":\"263774599141\",\"requestParam\":{\"planId\":\"9913510095\",\"cpId\":\"135\"}}"
+Date: 2024-06-17T19:26:09.235Z Response: {"requestId":"123","responseId":"a724686526572165","requestTimeStamp":"2024-06-17 19:26:09","responseTimeStamp":"2024-06-17 21:27:09","resultCode":"1","featureId":"ACTIVATION","resultParam":{"resultCode":"9","resultDescription":"Subscription Already Exists","planId":"9913510095"}}
+Date: 2024-06-17T19:26:27.564Z Error: {}
+Date: 2024-06-17T19:26:40.279Z Error: {}
+Date: 2024-06-17T19:34:52.058Z Error: {}
+Date: 2024-06-17T19:35:51.988Z Error: {}
+Date: 2024-06-17T19:36:40.083Z Error: {}
+Date: 2024-06-17T19:37:39.012Z Error: {}
+Date: 2024-06-17T19:39:08.774Z Request: "{\"requestId\":\"123\",\"requestTimeStamp\":\"2024-06-17 19:39:08\",\"channel\":\"2\",\"sourceNode\":\"SourceNode\",\"sourceAddress\":\"SourceAddress\",\"featureId\":\"Deactivation\",\"username\":\"UserName\",\"password\":\"Password\",\"externalServiceId\":\"263774599141\",\"requestParam\":{\"planId\":\"9913510095\",\"cpId\":\"135\"}}"
+Date: 2024-06-17T19:39:08.774Z Response: ""
+Date: 2024-06-17T19:39:36.267Z Request: "{\"requestId\":\"123\",\"requestTimeStamp\":\"2024-06-17 19:39:36\",\"channel\":\"2\",\"sourceNode\":\"SourceNode\",\"sourceAddress\":\"SourceAddress\",\"featureId\":\"Deactivation\",\"username\":\"UserName\",\"password\":\"Password\",\"externalServiceId\":\"263774599141\",\"requestParam\":{\"planId\":\"9913510095\",\"cpId\":\"135\"}}"
+Date: 2024-06-17T19:39:36.267Z Response: ""
+Date: 2024-06-17T19:39:59.947Z Request: "{\"requestId\":\"123\",\"requestTimeStamp\":\"2024-06-17 19:39:59\",\"channel\":\"2\",\"sourceNode\":\"SourceNode\",\"sourceAddress\":\"SourceAddress\",\"featureId\":\"Activation\",\"username\":\"UserName\",\"password\":\"Password\",\"externalServiceId\":\"263774599141\",\"requestParam\":{\"planId\":\"9913510095\",\"cpId\":\"135\"}}"
+Date: 2024-06-17T19:39:59.947Z Response: "{\"requestId\":\"123\",\"responseId\":\"a729386631366685\",\"requestTimeStamp\":\"2024-06-17 19:39:59\",\"responseTimeStamp\":\"2024-06-17 21:40:26\",\"resultCode\":\"0\",\"featureId\":\"ACTIVATION\",\"resultParam\":{\"resultCode\":\"0\",\"resultDescription\":\"Activation Success\",\"planId\":\"9913510095\"}}"
+Date: 2024-06-17T19:40:21.807Z Request: "{\"requestId\":\"123\",\"requestTimeStamp\":\"2024-06-17 19:40:21\",\"channel\":\"2\",\"sourceNode\":\"SourceNode\",\"sourceAddress\":\"SourceAddress\",\"featureId\":\"Deactivation\",\"username\":\"UserName\",\"password\":\"Password\",\"externalServiceId\":\"263774599141\",\"requestParam\":{\"planId\":\"9913510095\",\"cpId\":\"135\"}}"
+Date: 2024-06-17T19:40:21.807Z Response: ""
+Date: 2024-06-17T19:47:47.359Z Request: "{\"requestId\":\"123\",\"requestTimeStamp\":\"2024-06-17 19:47:47\",\"channel\":\"2\",\"sourceNode\":\"SourceNode\",\"sourceAddress\":\"SourceAddress\",\"featureId\":\"Activation\",\"username\":\"UserName\",\"password\":\"Password\",\"externalServiceId\":\"263774599141\",\"requestParam\":{\"planId\":\"9913510095\",\"cpId\":\"135\"}}"
+Date: 2024-06-17T19:47:47.359Z Response: {"requestId":"123","responseId":"a729853948928278","requestTimeStamp":"2024-06-17 19:47:47","responseTimeStamp":"2024-06-17 21:48:13","resultCode":"1","featureId":"ACTIVATION","resultParam":{"resultCode":"9","resultDescription":"Subscription Already Exists","planId":"9913510095"}}
+Date: 2024-06-17T19:48:09.746Z Request: "{\"requestId\":\"123\",\"requestTimeStamp\":\"2024-06-17 19:48:09\",\"channel\":\"2\",\"sourceNode\":\"SourceNode\",\"sourceAddress\":\"SourceAddress\",\"featureId\":\"Deactivation\",\"username\":\"UserName\",\"password\":\"Password\",\"externalServiceId\":\"263774599141\",\"requestParam\":{\"planId\":\"9913510095\",\"cpId\":\"135\"}}"
+Date: 2024-06-17T19:48:09.746Z Response: {"requestId":"123","responseId":"a729876353680561","requestTimeStamp":"2024-06-17 19:48:09","responseTimeStamp":"2024-06-17 21:48:35","resultCode":"0","featureId":"DEACTIVATION","resultParam":{"resultCode":"1","resultDescription":"Deactivate Subscription Success","planId":"9913510095"}}

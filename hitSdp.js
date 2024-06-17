@@ -39,18 +39,25 @@ export async function hitSDP({token, request, requestId, msisdn, planId} ) {
       headers: myHeaders,
       body: raw,
       redirect: "follow",
-      agent: new https.Agent({ 
-        rejectUnauthorized: false 
-      })
+      // agent: new https.Agent({ 
+      //   rejectUnauthorized: false 
+      // })
     };
     
     const isoDate = date.toISOString();
     try {
-      const data = await fetch(`https://10.10.11.162:9480/APIGateway/api/public/SMACT/${request}`, requestOptions,{ timeout: 5000 })
-      // const data = await fetch(`https://sdp.api.econet.co.zw:9480/APIGateway/api/public/SMACT/${request}`, requestOptions,{ timeout: 5000 })
+      const urlParam = request === "Activation" ? "SMACT" : "SMDACT";
+      const data = await fetch(`https://10.10.11.162:9480/APIGateway/api/public/${urlParam}/${request}`, requestOptions,{ timeout: 5000 })
+
+     
+
+      // const data = await fetch(`https://sdp.api.econet.co.zw:9480/APIGateway/api/public/${urlParam}/${request}`, requestOptions)
+
+
       let response;
       if (data && data.ok) {
-        response = await data.json()
+
+        response = await data.json();
       } else {
         console.error('Empty response or error occurred');
         response = {}; // set response as an empty object to avoid undefined
@@ -64,6 +71,9 @@ export async function hitSDP({token, request, requestId, msisdn, planId} ) {
       return { error: 'Request timed out' };
   }
 
+  
+
 }
 
-// hitSDP({token:"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTaGFua2x5MTM1IiwiYXVkIjoiQSIsInNjb3BlcyI6IkFETUlOIiwiZW50aXR5SWQiOiIiLCJpc3MiOiJodHRwOi8vc2l4ZGVlLmNvbSIsImlhdCI6MTcxODY1MDE3OSwiZXhwIjoxNzE4NjU2MTc5fQ.-DMBrZ_uIaU1LMJmqVIY-XanmzeISlFOlxwXpAD3c9ATeY2pqBQWG-92Xe1olDSgqgtbOsXDWrKFzXS_wT70Jg", request: "Activation", requestId: 123, msisdn: 774599141, planId: 9913510095}).then(console.log).catch(console.error);
+hitSDP({token:"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTaGFua2x5MTM1IiwiYXVkIjoiQSIsInNjb3BlcyI6IkFETUlOIiwiZW50aXR5SWQiOiIiLCJpc3MiOiJodHRwOi8vc2l4ZGVlLmNvbSIsImlhdCI6MTcxODY1MDE3OSwiZXhwIjoxNzE4NjU2MTc5fQ.-DMBrZ_uIaU1LMJmqVIY-XanmzeISlFOlxwXpAD3c9ATeY2pqBQWG-92Xe1olDSgqgtbOsXDWrKFzXS_wT70Jg", request: "Activation", requestId: "123", msisdn: "263774599141", planId: "9913510095"}).then(console.log).catch(console.error);
+
