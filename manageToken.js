@@ -20,8 +20,10 @@ export async function getToken() {
   const requestOptions = {
     method: "POST",
     headers: myHeaders,
-    body: urlencoded,
-    redirect: "follow"
+    redirect: "follow",
+    agent: new https.Agent({ 
+        rejectUnauthorized: false 
+      })
 };
 
 try {
