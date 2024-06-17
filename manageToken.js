@@ -1,6 +1,5 @@
 import fetch from 'node-fetch';
 import https from 'https';
-
 let token = null;
 let tokenExpiration = null;
 
@@ -23,6 +22,7 @@ export async function getToken() {
   const requestOptions = {
     method: "POST",
     headers: myHeaders,
+    body: urlencoded,
     redirect: "follow",
     agent: new https.Agent({ 
         rejectUnauthorized: false 
@@ -31,8 +31,6 @@ export async function getToken() {
 
 try {
     const data  = await fetch("https://10.10.11.162:9480/token/", requestOptions);
-
-    console.log("Request Options: ", requestOptions);
     
     if (data.headers.get('Content-Type').includes('application/json')) {
         const response = await data.json();
@@ -40,8 +38,6 @@ try {
         // Store the token and its expiration time
         token = response;
         tokenExpiration = new Date(currentTime.getTime() + response.expires_in * 1000);
-
-        console.log('Token:', token);
 
         return response;
     } else {
@@ -53,3 +49,6 @@ try {
     throw error;
 }
 }
+
+
+getToken().then(console.log).catch(console.error);
