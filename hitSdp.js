@@ -75,5 +75,5 @@ export async function hitSDP({token, request, requestId, msisdn, planId} ) {
 
 }
 
-hitSDP({token:"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTaGFua2x5MTM1IiwiYXVkIjoiQSIsInNjb3BlcyI6IkFETUlOIiwiZW50aXR5SWQiOiIiLCJpc3MiOiJodHRwOi8vc2l4ZGVlLmNvbSIsImlhdCI6MTcxODY1MDE3OSwiZXhwIjoxNzE4NjU2MTc5fQ.-DMBrZ_uIaU1LMJmqVIY-XanmzeISlFOlxwXpAD3c9ATeY2pqBQWG-92Xe1olDSgqgtbOsXDWrKFzXS_wT70Jg", request: "Activation", requestId: "123", msisdn: "263774599141", planId: "9913510095"}).then(console.log).catch(console.error);
+// hitSDP({token:"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTaGFua2x5MTM1IiwiYXVkIjoiQSIsInNjb3BlcyI6IkFETUlOIiwiZW50aXR5SWQiOiIiLCJpc3MiOiJodHRwOi8vc2l4ZGVlLmNvbSIsImlhdCI6MTcxODY1MDE3OSwiZXhwIjoxNzE4NjU2MTc5fQ.-DMBrZ_uIaU1LMJmqVIY-XanmzeISlFOlxwXpAD3c9ATeY2pqBQWG-92Xe1olDSgqgtbOsXDWrKFzXS_wT70Jg", request: "Activation", requestId: "123", msisdn: "263774599141", planId: "9913510095"}).then(console.log).catch(console.error);
 
