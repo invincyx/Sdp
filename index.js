@@ -39,7 +39,7 @@ app.get("/test-connection", async (req, res) => {
 
 
   async function pollDatabase() {
-    const token = await getToken();
+    // const token = await getToken();
     console.log("Poll Database running...");
     try {
       const [rows] = await database.query("SELECT * FROM sdp_request WHERE status = ? LIMIT 100", [11]);
@@ -54,7 +54,7 @@ app.get("/test-connection", async (req, res) => {
   
           try {
             console.log("Trying to hit SDP...🍀");
-            const hitSdp = await hitSDP({token: token, request: featureId, requestId: Math.floor(row.trans_id), msisdn: Math.floor(row.receiver), planId: row.P_Code })
+            const hitSdp = await hitSDP({token: "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTaGFua2x5MTM1IiwiYXVkIjoiQSIsInNjb3BlcyI6IkFETUlOIiwiZW50aXR5SWQiOiIiLCJpc3MiOiJodHRwOi8vc2l4ZGVlLmNvbSIsImlhdCI6MTcxODY0NzAzNywiZXhwIjoxNzE4NjUzMDM3fQ.KJ4jLPtaanOULB-_EyPAXgUgdzP4zSN_9jFHxR1UepPfl6lV-RoE6c_tqokJ6mdyoEyU7ansnaw5zDxd5f6sAA", request: featureId, requestId: Math.floor(row.trans_id), msisdn: Math.floor(row.receiver), planId: row.P_Code })
             console.log(hitSdp);
   
             // Log the billing hit
