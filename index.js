@@ -39,7 +39,7 @@ app.get("/test-connection", async (req, res) => {
 
 
   async function pollDatabase() {
-    // const token = await getToken();
+    const token = await getToken();
     console.log("Poll Database running...");
     try {
       const [rows] = await database.query("SELECT * FROM sdp_request WHERE status = ? LIMIT 100", [11]);
