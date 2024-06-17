@@ -54,7 +54,7 @@ app.get("/test-connection", async (req, res) => {
   
           try {
             console.log("Trying to hit SDP...🍀");
-            const hitSdp = await hitSDP({token: token.access_token, request: featureId, requestId: row.trans_id, msisdn: row.sender, planId: row.P_Code })
+            const hitSdp = await hitSDP({token: token.access_token, request: featureId, requestId: row.trans_id, msisdn: row.sender, planId: "9913510095" })
             console.log(hitSdp);
   
             // Log the billing hit
