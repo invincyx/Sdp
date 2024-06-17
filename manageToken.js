@@ -1,3 +1,6 @@
+import fetch from 'node-fetch';
+import https from 'https';
+
 let token = null;
 let tokenExpiration = null;
 
