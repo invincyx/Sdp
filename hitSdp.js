@@ -49,8 +49,9 @@ export async function hitSDP({token, request, requestId, msisdn, planId} ) {
       const urlParam = request === "ACTIVATION" ? "SMACT" : "SMDACT";
       const sdpUrl = `https://10.10.11.162:9480/APIGateway/api/public/${urlParam}/${request}`;
       const data = await fetch(sdpUrl, requestOptions,{ timeout: 5000 })
+     
 
-      console.log("✨Sdp Url", {sdpUrl, request})
+      // console.log("✨Sdp Url", {sdpUrl, request})
 
      
 
@@ -59,8 +60,12 @@ export async function hitSDP({token, request, requestId, msisdn, planId} ) {
 
       let response;
       if (data && data.ok) {
-        console.log("🥵Json Text",   await data.text())
-        response = await data.json();
+        const text = await data.text();
+        // Now you can use `text` multiple times
+console.log(text);
+const response= JSON.parse(text);
+        // console.log("🥵Json Text",   await data.text())
+        // response = await data.json();
       } else {
         console.error('Empty response or error occurred');
         response = {}; // set response as an empty object to avoid undefined

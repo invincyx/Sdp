@@ -54,7 +54,7 @@ app.get("/test-connection", async (req, res) => {
   
           try {
             console.log("Trying to hit SDP...🍀");
-            const hitSdp = await hitSDP({token: "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTaGFua2x5MTM1IiwiYXVkIjoiQSIsInNjb3BlcyI6IkFETUlOIiwiZW50aXR5SWQiOiIiLCJpc3MiOiJodHRwOi8vc2l4ZGVlLmNvbSIsImlhdCI6MTcxODY1NzQ2NiwiZXhwIjoxNzE4NjYzNDY2fQ.b4aPcwEwsUBuzrHHq2G9epYEQkjNu0JQdOKVaDFjNeZml0W7OJj2bCLeIecTi76jiHlbh7rpAllukN4sB126FA", request: featureId, requestId: row.trans_id, msisdn: row.sender, planId: "9913510095" })
+            const hitSdp = await hitSDP({token: token.access_token, request: featureId, requestId: row.trans_id, msisdn: row.sender, planId: "9913510095" })
             console.log(hitSdp);
   
             // Log the billing hit
