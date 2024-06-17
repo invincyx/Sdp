@@ -1,13 +1,16 @@
 import fs from 'fs';
 import { promisify } from 'util';
+import fetch from 'node-fetch';
+import https from 'https';
 
 const appendFile = promisify(fs.appendFile);
 
 export async function hitSDP({token, request, requestId, msisdn, planId} ) {
 
-    const myHeaders = new Headers();
-    myHeaders.append("X-Authorization", `Bearer ${token}`);
-    myHeaders.append("Content-Type", "application/json");
+    const myHeaders = {
+        "X-Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+    };
 
     console.log({token})
     
@@ -35,7 +38,10 @@ export async function hitSDP({token, request, requestId, msisdn, planId} ) {
       method: "POST",
       headers: myHeaders,
       body: raw,
-      redirect: "follow"
+      redirect: "follow",
+      agent: new https.Agent({ 
+        rejectUnauthorized: false 
+      })
     };
     
     const isoDate = date.toISOString();
@@ -43,15 +49,13 @@ export async function hitSDP({token, request, requestId, msisdn, planId} ) {
         const data = await fetch(`https://10.10.11.162:9480/APIGateway/api/public/SMACT/${request}`, requestOptions,{ timeout: 5000 })
         const response = await data.json()
         const date = new Date().toISOString();
-        await appendFile('sdplogs.txt', `Date: ${isoDate} Request: ${JSON.stringify(raw)}\n`);
-        await appendFile('sdplogs.txt', `Date: ${isoDate} Response: ${JSON.stringify(response)}\n`);
+        await appendFile('sdplogs.txt', [`Date: ${isoDate} Request: ${JSON.stringify(raw)}\n`]);
+        await appendFile('sdplogs.txt', [`Date: ${isoDate} Response: ${JSON.stringify(response)}\n`]);
         return response;
     } catch (error) {
         console.error('Error:', error);
-        await appendFile('sdplogs.txt', `Date: ${isoDate} Error: ${JSON.stringify(error)}\n`);
+        await appendFile('sdplogs.txt', [`Date: ${isoDate} Error: ${JSON.stringify(error)}\n`]);
         return { error: 'Request timed out' };
     }
 
 }
-
-
