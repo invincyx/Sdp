@@ -31,6 +31,8 @@ export async function getToken() {
 
 try {
     const data  = await fetch("https://10.10.11.162:9480/token/", requestOptions);
+
+    console.log("Request Options: ", requestOptions);
     
     if (data.headers.get('Content-Type').includes('application/json')) {
         const response = await data.json();
