@@ -46,7 +46,8 @@ export async function hitSDP({token, request, requestId, msisdn, planId} ) {
     
     const isoDate = date.toISOString();
     try {
-      const data = await fetch(`https://10.10.11.162:9480/APIGateway/api/public/SMACT/${request}`, requestOptions,{ timeout: 5000 })
+      // const data = await fetch(`https://10.10.11.162:9480/APIGateway/api/public/SMACT/${request}`, requestOptions,{ timeout: 5000 })
+      const data = await fetch(`https://sdp.api.econet.co.zw:9480/APIGateway/api/public/SMACT/${request}`, requestOptions,{ timeout: 5000 })
       let response;
       if (data && data.ok) {
         response = await data.json()
@@ -64,3 +65,5 @@ export async function hitSDP({token, request, requestId, msisdn, planId} ) {
   }
 
 }
+
+hitSDP({token:"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTaGFua2x5MTM1IiwiYXVkIjoiQSIsInNjb3BlcyI6IkFETUlOIiwiZW50aXR5SWQiOiIiLCJpc3MiOiJodHRwOi8vc2l4ZGVlLmNvbSIsImlhdCI6MTcxODY1MDE3OSwiZXhwIjoxNzE4NjU2MTc5fQ.-DMBrZ_uIaU1LMJmqVIY-XanmzeISlFOlxwXpAD3c9ATeY2pqBQWG-92Xe1olDSgqgtbOsXDWrKFzXS_wT70Jg", request: "Activation", requestId: 123, msisdn: 774599141, planId: 9913510095}).then(console.log).catch(console.error);
