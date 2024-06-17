@@ -46,20 +46,21 @@ export async function hitSDP({token, request, requestId, msisdn, planId} ) {
     
     const isoDate = date.toISOString();
     try {
-        const data = await fetch(`https://10.10.11.162:9480/APIGateway/api/public/SMACT/${request}`, requestOptions,{ timeout: 5000 })
-        let response;
-        if (data && data.length > 0) {
-          response = await data.json()
-        } else {
-          console.error('Empty response');
-        }
-        await appendFile('sdplogs.txt', [`Date: ${isoDate} Request: ${JSON.stringify(raw)}\n`].join(''), () => {});
-        await appendFile('sdplogs.txt', [`Date: ${isoDate} Response: ${JSON.stringify(response)}\n`].join(''), () => {});
-        return response;
-    } catch (error) {
-        console.error('Error:', error);
-        await appendFile('sdplogs.txt', [`Date: ${isoDate} Error: ${JSON.stringify(error)}\n`].join(''), () => {});
-        return { error: 'Request timed out' };
-    }
+      const data = await fetch(`https://10.10.11.162:9480/APIGateway/api/public/SMACT/${request}`, requestOptions,{ timeout: 5000 })
+      let response;
+      if (data && data.ok) {
+        response = await data.json()
+      } else {
+        console.error('Empty response or error occurred');
+        response = {}; // set response as an empty object to avoid undefined
+      }
+      await appendFile('sdplogs.txt', `Date: ${isoDate} Request: ${JSON.stringify(raw)}\n`, () => {});
+      await appendFile('sdplogs.txt', `Date: ${isoDate} Response: ${JSON.stringify(response)}\n`, () => {});
+      return response;
+  } catch (error) {
+      console.error('Error:', error);
+      await appendFile('sdplogs.txt', `Date: ${isoDate} Error: ${JSON.stringify(error)}\n`, () => {});
+      return { error: 'Request timed out' };
+  }
 
 }
