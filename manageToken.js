@@ -39,6 +39,8 @@ try {
         token = response;
         tokenExpiration = new Date(currentTime.getTime() + response.expires_in * 1000);
 
+        console.log('Token:', token);
+
         return response;
     } else {
         console.error('Expected JSON but received', await data.text());
