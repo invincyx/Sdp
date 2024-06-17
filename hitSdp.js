@@ -39,9 +39,9 @@ export async function hitSDP({token, request, requestId, msisdn, planId} ) {
       headers: myHeaders,
       body: raw,
       redirect: "follow",
-      // agent: new https.Agent({ 
-      //   rejectUnauthorized: false 
-      // })
+      agent: new https.Agent({ 
+        rejectUnauthorized: false 
+      })
     };
     
     const isoDate = date.toISOString();
