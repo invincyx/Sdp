@@ -30,7 +30,7 @@ export async function getToken() {
 };
 
 try {
-    const data  = await fetch("http://10.10.11.162:9480/token/", requestOptions);
+    const data  = await fetch("https://10.10.11.162:9480/token/", requestOptions);
     
     if (data.headers.get('Content-Type').includes('application/json')) {
         const response = await data.json();
