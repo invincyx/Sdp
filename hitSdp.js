@@ -63,7 +63,7 @@ export async function hitSDP({token, request, requestId, msisdn, planId} ) {
         const text = await data.text();
         // Now you can use `text` multiple times
 console.log(text);
-const response= JSON.parse(text);
+response= JSON.parse(text);
         // console.log("🥵Json Text",   await data.text())
         // response = await data.json();
       } else {
