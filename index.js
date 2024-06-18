@@ -105,7 +105,7 @@ app.get("/test-connection", async (req, res) => {
     }
   }
 
-setInterval(pollDatabase, 10000);
+  setInterval(pollDatabase, 60000);
 
 
 app.get("/billing-notification", async (req, res) => {
