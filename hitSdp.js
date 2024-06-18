@@ -48,31 +48,34 @@ export async function hitSDP({token, request, requestId, msisdn, planId} ) {
     try {
       const urlParam = request === "ACTIVATION" ? "SMACT" : "SMDACT";
       const sdpUrl = `https://10.10.11.162:9480/APIGateway/api/public/${urlParam}/${request}`;
-      const data = await fetch(sdpUrl, requestOptions)
+
      
 
       // console.log("✨Sdp Url", {sdpUrl, request})
 
+      // const sdpUrl = `https://sdp.api.econet.co.zw:9480/APIGateway/api/public/${urlParam}/${request}`
+
      
 
-      // const data = await fetch(`https://sdp.api.econet.co.zw:9480/APIGateway/api/public/${urlParam}/${request}`, requestOptions)
+        console.log("✨Sdp Url", {sdpUrl})
+
+
+      const data = await fetch(sdpUrl, requestOptions)
 
 
       let response;
       if (data && data.ok) {
-//         const text = await data.text();
-//         // Now you can use `text` multiple times
-// console.log(text);
-// response= JSON.parse(text);
-        // console.log("🥵Json Text",   await data.text())
+
         response = await data.json();
+
+        console.log("✨Response", response);
       } else {
         console.error('Empty response or error occurred');
         response = {}; // set response as an empty object to avoid undefined
       }
       await appendFile('sdplogs.txt', `Date: ${isoDate} Request: ${JSON.stringify(raw)}\n`, () => {});
       await appendFile('sdplogs.txt', `Date: ${isoDate} Response: ${JSON.stringify(response)}\n`, () => {});
-      // return response;
+      return response;
   } catch (error) {
       console.error('Error:', error);
       await appendFile('sdplogs.txt', `Date: ${isoDate} Error: ${JSON.stringify(error)}\n`, () => {});
@@ -83,5 +86,7 @@ export async function hitSDP({token, request, requestId, msisdn, planId} ) {
 
 }
 
-hitSDP({token:"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTaGFua2x5MTM1IiwiYXVkIjoiQSIsInNjb3BlcyI6IkFETUlOIiwiZW50aXR5SWQiOiIiLCJpc3MiOiJodHRwOi8vc2l4ZGVlLmNvbSIsImlhdCI6MTcxODY4OTQ1NCwiZXhwIjoxNzE4Njk1NDU0fQ.EvWNiTioZbhMRbeYV2M4hBygQCj-QkFOGhGS7tGMnO6c5NXnX8NjVPyd4VhTa8DviNyggSXg_Qz9znxnKXUcGg", request: "Deactivation", requestId: "123", msisdn: "263774599141", planId: "9913510095"}).then(console.log).catch(console.error);
+hitSDP({token:"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTaGFua2x5MTM1IiwiYXVkIjoiQSIsInNjb3BlcyI6IkFETUlOIiwiZW50aXR5SWQiOiIiLCJpc3MiOiJodHRwOi8vc2l4ZGVlLmNvbSIsImlhdCI6MTcxODY4OTQ1NCwiZXhwIjoxNzE4Njk1NDU0fQ.EvWNiTioZbhMRbeYV2M4hBygQCj-QkFOGhGS7tGMnO6c5NXnX8NjVPyd4VhTa8DviNyggSXg_Qz9znxnKXUcGg", request: "Deactivation", requestId: "123", msisdn: "263774599141", planId: "9913510095"})
+.then((res)=> console.log(res))
+.catch(console.error)
 
