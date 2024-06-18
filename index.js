@@ -119,7 +119,7 @@ app.post("/billing-notification", async (req, res) => {
     in_reason,
     in_channel_id,
     in_time_stamp
-  } = req.body;
+  } = req.query;
 
   // Log the billing notification
   const notificationLog = `Billing Notification: ${JSON.stringify(req.body)}\n`;
