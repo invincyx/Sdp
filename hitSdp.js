@@ -48,7 +48,7 @@ export async function hitSDP({token, request, requestId, msisdn, planId} ) {
     try {
       const urlParam = request === "ACTIVATION" ? "SMACT" : "SMDACT";
       const sdpUrl = `https://10.10.11.162:9480/APIGateway/api/public/${urlParam}/${request}`;
-      const data = await fetch(sdpUrl, requestOptions,{ timeout: 5000 })
+      const data = await fetch(sdpUrl, requestOptions)
      
 
       // console.log("✨Sdp Url", {sdpUrl, request})
