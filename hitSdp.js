@@ -60,12 +60,12 @@ export async function hitSDP({token, request, requestId, msisdn, planId} ) {
 
       let response;
       if (data && data.ok) {
-        const text = await data.text();
-        // Now you can use `text` multiple times
-console.log(text);
+//         const text = await data.text();
+//         // Now you can use `text` multiple times
+// console.log(text);
 // response= JSON.parse(text);
         // console.log("🥵Json Text",   await data.text())
-        // response = await data.json();
+        response = await data.json();
       } else {
         console.error('Empty response or error occurred');
         response = {}; // set response as an empty object to avoid undefined
