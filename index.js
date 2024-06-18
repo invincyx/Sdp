@@ -108,7 +108,7 @@ app.get("/test-connection", async (req, res) => {
 setInterval(pollDatabase, 10000);
 
 
-app.post("/billing-notification", async (req, res) => {
+app.get("/billing-notification", async (req, res) => {
   const {
     user_msisdn,
     user_product_code,
