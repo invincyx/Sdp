@@ -61,9 +61,9 @@ app.get("/test-connection", async (req, res) => {
             // await fs.appendFile('billingHits.txt', `Date: ${new Date().toISOString()} Billing Hit: ${JSON.stringify(hitSdp)}\n`);
   
             // Update status based on the result code
-            const resultCode = hitSdp.resultCode === "0" ? '11' : hitSdp.resultCode;
+            const resultCode = await hitSdp.resultCode === "0" ? '11' : hitSdp.resultCode;
 
-            console.log("🍀 Result code: ", resultCode);
+            console.log("🍀 Result code: ", await resultCode);
   
             // Declare the output variable
             await database.query("SET @output = ''");
