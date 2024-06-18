@@ -108,23 +108,6 @@ app.get("/test-connection", async (req, res) => {
 setInterval(pollDatabase, 10000);
 
 
-// async function testHits(){
-
-//   const token = await getToken();
-//   console.log("Poll Database running...");
-
-//   console.log("Trying to hit SDP...🍀");
-//   // const hitSdp = await hitSDP({token: token.access_token, request: "Activation", requestId: "060424090425", msisdn: "263772884874", planId: "9913510095" })
-
-//   const hitSdp = await  hitSDP({token:token.access_token, request: "Activation", requestId: "060424090425", msisdn: "263774599141", planId: "9913510095"})
-
-//   const response = await hitSdp;
-//   console.log("🍀 Response: ", response);
-// }
-
-// setInterval(testHits, 10000);
-
-
 app.post("/billing-notification", async (req, res) => {
   const {
     user_msisdn,
