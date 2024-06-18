@@ -34,9 +34,6 @@ app.get("/test-connection", async (req, res) => {
 
 
 
-
-
-
   async function pollDatabase() {
     const token = await getToken();
     console.log("Poll Database running...");
@@ -71,9 +68,7 @@ app.get("/test-connection", async (req, res) => {
             console.log(`Running SQL query: ${sql} with parameters: ${[row.trans_id, row.sender, resultCode]}`);
   
             // Pass the output variable to the procedure
-            // const callPocedure = await database.query("CALL SDP_Response(?, ?, ?, @output)", [row.trans_id, row.sender, resultCode]);
-
-            const callPocedure = await database.query(`CALL SDP_Response('${row.trans_id}', '${row.sender}', '${resultCode}', @output)`);
+            const callPocedure = await database.query("CALL SDP_Response(?, ?, ?, @output)", [`${row.trans_id}`, `${row.sender}`, `${resultCode}`]);
 
             console.log("🍀 Call Procedure: ", callPocedure);
   
