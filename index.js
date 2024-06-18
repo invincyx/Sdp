@@ -68,7 +68,7 @@ app.get("/test-connection", async (req, res) => {
             await database.query("SET @output = ''");
   
             // Pass the output variable to the procedure
-            await database.query("CALL SDP_Response(?, ?, ?, @output)", [row.trans_id_in, row.receiver, resultCode]);
+            await database.query("CALL SDP_Response(?, ?, ?, @output)", [row.trans_id_in, row.sender, resultCode]);
   
             // Get the output value
             const result = await database.query("SELECT @output as output");

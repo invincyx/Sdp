@@ -68,7 +68,6 @@ export async function hitSDP({token, request, requestId, msisdn, planId} ) {
 
         response = await data.json();
 
-        console.log("✨Response", response);
       } else {
         console.error('Empty response or error occurred');
         response = {}; // set response as an empty object to avoid undefined
