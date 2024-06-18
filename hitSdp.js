@@ -46,7 +46,7 @@ export async function hitSDP({token, request, requestId, msisdn, planId} ) {
     
     const isoDate = date.toISOString();
     try {
-      const urlParam = request === "ACTIVATION" ? "SMACT" : "SMDACT";
+      const urlParam = request.toLowerCase() === "activation" ? "SMACT" : "SMDACT";
       const sdpUrl = `https://10.10.11.162:9480/APIGateway/api/public/${urlParam}/${request}`;
 
      
