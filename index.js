@@ -62,10 +62,13 @@ app.get("/test-connection", async (req, res) => {
             // Update status based on the result code
             const resultCode = await hitSdp.resultCode === "0" ? 88 : hitSdp.resultCode;
 
-            console.log("🍀 Result code: ", await resultCode);
+            console.log("🌍  Result code: ", await resultCode);
   
             // Declare the output variable
             await database.query("SET @output = ''");
+
+            const sql = "CALL SDP_Response(?, ?, ?, @output)";
+            console.log(`Running SQL query: ${sql} with parameters: ${[row.trans_id, row.sender, resultCode]}`);
   
             // Pass the output variable to the procedure
             const callPocedure = await database.query("CALL SDP_Response(?, ?, ?, @output)", [row.trans_id, row.sender, resultCode]);
