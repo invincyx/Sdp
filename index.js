@@ -60,7 +60,7 @@ app.get("/test-connection", async (req, res) => {
             // await fs.appendFile('billingHits.txt', `Date: ${new Date().toISOString()} Billing Hit: ${JSON.stringify(hitSdp)}\n`);
   
             // Update status based on the result code
-            const resultCode = await hitSdp.resultCode === 0 ? 88 : hitSdp.resultCode;
+            const resultCode = await hitSdp.resultCode === "0" ? 88 : hitSdp.resultCode;
 
             console.log("🍀 Result code: ", await resultCode);
   
