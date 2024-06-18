@@ -83,5 +83,5 @@ console.log(text);
 
 }
 
-// hitSDP({token:"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTaGFua2x5MTM1IiwiYXVkIjoiQSIsInNjb3BlcyI6IkFETUlOIiwiZW50aXR5SWQiOiIiLCJpc3MiOiJodHRwOi8vc2l4ZGVlLmNvbSIsImlhdCI6MTcxODY1MDE3OSwiZXhwIjoxNzE4NjU2MTc5fQ.-DMBrZ_uIaU1LMJmqVIY-XanmzeISlFOlxwXpAD3c9ATeY2pqBQWG-92Xe1olDSgqgtbOsXDWrKFzXS_wT70Jg", request: "Activation", requestId: "123", msisdn: "263774599141", planId: "9913510095"}).then(console.log).catch(console.error);
+hitSDP({token:"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTaGFua2x5MTM1IiwiYXVkIjoiQSIsInNjb3BlcyI6IkFETUlOIiwiZW50aXR5SWQiOiIiLCJpc3MiOiJodHRwOi8vc2l4ZGVlLmNvbSIsImlhdCI6MTcxODY4OTQ1NCwiZXhwIjoxNzE4Njk1NDU0fQ.EvWNiTioZbhMRbeYV2M4hBygQCj-QkFOGhGS7tGMnO6c5NXnX8NjVPyd4VhTa8DviNyggSXg_Qz9znxnKXUcGg", request: "Activation", requestId: "123", msisdn: "263774599141", planId: "9913510095"}).then(console.log).catch(console.error);
 
