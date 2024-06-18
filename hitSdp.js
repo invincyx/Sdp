@@ -63,7 +63,7 @@ export async function hitSDP({token, request, requestId, msisdn, planId} ) {
         const text = await data.text();
         // Now you can use `text` multiple times
 console.log(text);
-response= JSON.parse(text);
+// response= JSON.parse(text);
         // console.log("🥵Json Text",   await data.text())
         // response = await data.json();
       } else {
@@ -72,7 +72,7 @@ response= JSON.parse(text);
       }
       await appendFile('sdplogs.txt', `Date: ${isoDate} Request: ${JSON.stringify(raw)}\n`, () => {});
       await appendFile('sdplogs.txt', `Date: ${isoDate} Response: ${JSON.stringify(response)}\n`, () => {});
-      return response;
+      // return response;
   } catch (error) {
       console.error('Error:', error);
       await appendFile('sdplogs.txt', `Date: ${isoDate} Error: ${JSON.stringify(error)}\n`, () => {});
