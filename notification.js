@@ -3,7 +3,6 @@ import database from "./database.js";
 import fs from 'fs';
 import { promisify } from 'util';
 
-const appendFile = promisify(fs.appendFile);
 async function processBillingNotification(billingData) {
     const {
       user_msisdn,
@@ -39,7 +38,7 @@ async function processBillingNotification(billingData) {
       const { errorCode, errorText } = rows[0];
       console.log(`Procedure output: errorCode = ${errorCode}, errorText = ${errorText}`);
   
-      return { message: "Billing notification processed successfully" };
+      return { message: "Billing notification processed successfully", errorCode, errorText };
     } catch (error) {
       console.error(error);
   
