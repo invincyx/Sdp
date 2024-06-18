@@ -24,7 +24,7 @@ async function processBillingNotification(billingData) {
   
     try {
       // Call the log_billing_notification procedure
-      const [rows] = await database.query("CALL log_billing_notification(?, ?, ?, ?, ?, ?, ?, ?, ?)", [
+      const [rows] = await database.query("CALL log_billing_notification(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [
         user_msisdn,
         user_product_code,
         in_life_cycle,
@@ -33,7 +33,9 @@ async function processBillingNotification(billingData) {
         in_fee,
         in_reason,
         in_channel_id,
-        in_time_stamp
+        in_time_stamp,
+        null, // errorCode
+        null  // errorText
       ]);
   
       // Handle the output parameters
