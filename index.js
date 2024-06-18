@@ -68,7 +68,7 @@ app.get("/test-connection", async (req, res) => {
             await database.query("SET @output = ''");
   
             // Pass the output variable to the procedure
-            const callPocedure = await database.query("CALL SDP_Response(?, ?, ?, @output)", [row.trans_id_in, row.sender, resultCode]);
+            const callPocedure = await database.query("CALL SDP_Response(?, ?, ?, @output)", [row.trans_id, row.sender, resultCode]);
 
             console.log("🍀 Call Procedure: ", callPocedure);
   
