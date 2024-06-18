@@ -38,7 +38,7 @@ app.get("/test-connection", async (req, res) => {
     const token = await getToken();
     console.log("Poll Database running...");
     try {
-      const [rows] = await database.query("SELECT * FROM sdp_request WHERE status = ? LIMIT 100", [11]);
+      const [rows] = await database.query("SELECT * FROM sdp_request WHERE status = ? LIMIT 100", [88]);
       console.log("Row length: ", rows.length); 
       console.log(rows);
       if (rows.length > 0) {
@@ -57,7 +57,7 @@ app.get("/test-connection", async (req, res) => {
             // await fs.appendFile('billingHits.txt', `Date: ${new Date().toISOString()} Billing Hit: ${JSON.stringify(hitSdp)}\n`);
   
             // Update status based on the result code
-            const resultCode = await hitSdp.resultCode === "0" ? 88 : hitSdp.resultCode;
+            const resultCode = await hitSdp.resultCode === "0" ? 11 : hitSdp.resultCode;
 
             console.log("🌍  Result code: ", await resultCode);
   
@@ -126,8 +126,12 @@ app.post("/billing-notification", async (req, res) => {
   await appendFile('billingNotificationLogs.txt', notificationLog);
 
   try {
+    // Define variables to hold the output parameters
+    let errorCode, errorText;
+
     // Call the log_billing_notification procedure
-    const [rows] = await database.query("CALL log_billing_notification(?, ?, ?, ?, ?, ?, ?, ?, ?)", [
+    await database.query("SET @p10 = 0, @p11 = ''");
+    await database.query("CALL log_billing_notification(?, ?, ?, ?, ?, ?, ?, ?, ?, @p10, @p11)", [
       user_msisdn,
       user_product_code,
       in_life_cycle,
@@ -138,12 +142,15 @@ app.post("/billing-notification", async (req, res) => {
       in_channel_id,
       in_time_stamp
     ]);
+    const rows = await database.query("SELECT @p10 as errorCode, @p11 as errorText");
 
-    // Handle the output parameters
-    const { errorCode, errorText } = rows[0];
+    // Get the output parameters
+    errorCode = rows[0][0].errorCode;
+    errorText = rows[0][0].errorText;
+
     console.log(`Procedure output: errorCode = ${errorCode}, errorText = ${errorText}`);
 
-    res.json({ message: "Billing notification processed successfully" });
+    res.json({ message: "Billing notification processed successfully", errorCode, errorText });
   } catch (error) {
     console.error(error);
 
