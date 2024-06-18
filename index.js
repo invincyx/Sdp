@@ -19,7 +19,7 @@ app.listen(port, () => {
 });
 
 
-// Test connection
+// ✨✨✨ Test connection to the database
 app.get("/test-connection", async (req, res) => {
     // const token = await getToken();
     // console.log(token);
@@ -33,6 +33,7 @@ app.get("/test-connection", async (req, res) => {
   });
 
 
+  // ✨✨✨Poll the database for new requests with status 88
 
   async function pollDatabase() {
     const token = await getToken();
@@ -50,7 +51,7 @@ app.get("/test-connection", async (req, res) => {
   
           try {
             console.log("Trying to hit SDP...🍀");
-            const hitSdp = await hitSDP({token: token.access_token, request: featureId, requestId: row.trans_id, msisdn: row.sender, planId: "9913510095" })
+            const hitSdp = await hitSDP({token: token.access_token, request: featureId, requestId: row.trans_id, msisdn: row.sender, planId: row.P_Code })
             console.log(await hitSdp);
   
             // Log the billing hit
@@ -108,6 +109,7 @@ app.get("/test-connection", async (req, res) => {
   setInterval(pollDatabase, 60000);
 
 
+//✨✨✨ Url for Billing Notification
 app.get("/billing-notification", async (req, res) => {
   const {
     user_msisdn,
