@@ -3,6 +3,8 @@ import database from "./database.js";
 import fs from 'fs';
 import { promisify } from 'util';
 
+const appendFile = promisify(fs.appendFile);
+
 async function processBillingNotification(billingData) {
     const {
       user_msisdn,
