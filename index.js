@@ -208,7 +208,22 @@ app.post("/billing-notification", async (req, res) => {
 
     console.log(`Procedure output: errorCode = ${errorCode}, errorText = ${errorText}`);
 
-    res.json({ message: "Billing notification processed successfully", errorCode, errorText });
+    // Create the response packet
+    const responsePacket = {
+      requestId,
+      responseId: requestId, // Assuming the responseId is the same as the requestId
+      requestTimeStamp,
+      responseTimeStamp: new Date().toISOString(), // Current timestamp
+      channel,
+      featureId,
+      resultCode: errorCode === 0 ? "0" : "1", // Assuming errorCode 0 means success
+      resultParam: {
+        resultCode: errorCode.toString(),
+        resultDescription: errorText
+      }
+    };
+
+    res.json(responsePacket);
   } catch (error) {
     console.error(error);
 
