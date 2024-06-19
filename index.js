@@ -110,18 +110,73 @@ app.get("/test-connection", async (req, res) => {
 
 
 //✨✨✨ Url for Billing Notification
-app.get("/billing-notification", async (req, res) => {
+// app.get("/billing-notification", async (req, res) => {
+//   const {
+//     user_msisdn,
+//     user_product_code,
+//     in_life_cycle,
+//     in_chargin_type,
+//     in_next_renew_date,
+//     in_fee,
+//     in_reason,
+//     in_channel_id,
+//     in_time_stamp
+//   } = req.query;
+
+//   // Log the billing notification
+//   const notificationLog = `Billing Notification: ${JSON.stringify(req.body)}\n`;
+//   await appendFile('billingNotificationLogs.txt', notificationLog);
+
+//   try {
+//     // Define variables to hold the output parameters
+//     let errorCode, errorText;
+
+//     // Call the log_billing_notification procedure
+//     await database.query("SET @p10 = 0, @p11 = ''");
+//     await database.query("CALL log_billing_notification(?, ?, ?, ?, ?, ?, ?, ?, ?, @p10, @p11)", [
+//       user_msisdn,
+//       user_product_code,
+//       in_life_cycle,
+//       in_chargin_type,
+//       in_next_renew_date,
+//       in_fee,
+//       in_reason,
+//       in_channel_id,
+//       in_time_stamp
+//     ]);
+//     const rows = await database.query("SELECT @p10 as errorCode, @p11 as errorText");
+
+//     // Get the output parameters
+//     errorCode = rows[0][0].errorCode;
+//     errorText = rows[0][0].errorText;
+
+//     console.log(`Procedure output: errorCode = ${errorCode}, errorText = ${errorText}`);
+
+//     res.json({ message: "Billing notification processed successfully", errorCode, errorText });
+//   } catch (error) {
+//     console.error(error);
+
+//     // Log the error
+//     await appendFile('errorLogs.txt', `Date: ${new Date().toISOString()} Error: ${JSON.stringify(error)}\n`);
+
+//     res.json({ message: "Failed to process billing notification", error: error.message });
+//   }
+// });
+
+
+app.post("/billing-notification", async (req, res) => {
   const {
-    user_msisdn,
-    user_product_code,
-    in_life_cycle,
-    in_chargin_type,
-    in_next_renew_date,
-    in_fee,
-    in_reason,
-    in_channel_id,
-    in_time_stamp
-  } = req.query;
+    requestId,
+    requestTimeStamp,
+    channel,
+    sourceNode,
+    sourceAddress,
+    featureId,
+    username,
+    password,
+    externalServiceId,
+    requestParam
+  } = req.body;
 
   // Log the billing notification
   const notificationLog = `Billing Notification: ${JSON.stringify(req.body)}\n`;
@@ -134,15 +189,16 @@ app.get("/billing-notification", async (req, res) => {
     // Call the log_billing_notification procedure
     await database.query("SET @p10 = 0, @p11 = ''");
     await database.query("CALL log_billing_notification(?, ?, ?, ?, ?, ?, ?, ?, ?, @p10, @p11)", [
-      user_msisdn,
-      user_product_code,
-      in_life_cycle,
-      in_chargin_type,
-      in_next_renew_date,
-      in_fee,
-      in_reason,
-      in_channel_id,
-      in_time_stamp
+      requestId,
+      requestTimeStamp,
+      channel,
+      sourceNode,
+      sourceAddress,
+      featureId,
+      username,
+      password,
+      externalServiceId,
+      requestParam
     ]);
     const rows = await database.query("SELECT @p10 as errorCode, @p11 as errorText");
 
@@ -162,7 +218,6 @@ app.get("/billing-notification", async (req, res) => {
     res.json({ message: "Failed to process billing notification", error: error.message });
   }
 });
-
 
 
 
