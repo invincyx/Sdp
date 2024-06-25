@@ -182,6 +182,11 @@ app.post("/billing-notification", async (req, res) => {
   const notificationLog = `Billing Notification: ${JSON.stringify(req.body)}\n`;
   await appendFile('billingNotificationLogs.txt', notificationLog);
 
+    // Log the billing notification along with any route and query parameters in the console
+    console.log(`Billing Notification: ${JSON.stringify(req.body)}`);
+    console.log(`Route Parameters: ${JSON.stringify(req.params)}`);
+    console.log(`Query Parameters: ${JSON.stringify(req.query)}`);
+
   try {
     // Define variables to hold the output parameters
     let errorCode, errorText;
