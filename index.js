@@ -313,7 +313,7 @@ app.post("/billing-notification", async (req, res) => {
       offerCode,
       subscriptionStatus,
       subscriberLifeCycle,
-      nextBillDate,
+      nextBillDate === undefined ? null : nextBillDate,
       chargeAmount,
       reason,
       channel,
