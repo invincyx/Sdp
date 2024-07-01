@@ -297,7 +297,16 @@ app.post("/billing-notification", async (req, res) => {
 
   try {
     await database.query("SET @errorCode = 0, @errorText = ''");
-    console.log(`Calling log_billing_notification with parameters: externalServiceId=${externalServiceId}, offerCode=${offerCode}, subscriptionStatus=${subscriptionStatus}, subscriberLifeCycle=${subscriberLifeCycle}, nextBillDate=${nextBillDate}, chargeAmount=${chargeAmount}, reason=${reason}, channel=${channel}, requestTimeStamp=${requestTimeStamp}`);
+    console.log(`Calling log_billing_notification with parameters: 
+      user_msisdn=${externalServiceId}, 
+      user_product_code=${offerCode}, 
+      in_life_cycle=${subscriptionStatus}, 
+      in_chargin_type=${subscriberLifeCycle}, 
+      in_next_renew_date=${nextBillDate}, 
+      in_fee=${chargeAmount}, 
+      in_reason=${reason}, 
+      in_channel_id=${channel}, 
+      in_time_stamp=${requestTimeStamp}`);
 
     await database.query("CALL log_billing_notification(?, ?, ?, ?, ?, ?, ?, ?, ?, @errorCode, @errorText)", [
       externalServiceId,
