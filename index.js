@@ -304,7 +304,7 @@ const nextBillDateForDb = nextBillDate === undefined ? null : nextBillDate;
       user_product_code=${offerCode}, 
       in_life_cycle=${subscriptionStatus}, 
       in_chargin_type=${subscriberLifeCycle}, 
-      in_next_renew_date=${nextBillDateForDb,}, 
+      in_next_renew_date=${nextBillDateForDb}, 
       in_fee=${chargeAmount}, 
       in_reason=${reason}, 
       in_channel_id=${channel}, 
