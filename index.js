@@ -297,12 +297,14 @@ app.post("/billing-notification", async (req, res) => {
 
   try {
     await database.query("SET @errorCode = 0, @errorText = ''");
+    // Ensure nextBillDate is set to null if it's undefined before logging and database call
+const nextBillDateForDb = nextBillDate === undefined ? null : nextBillDate;
     console.log(`Calling log_billing_notification with parameters: 
       user_msisdn=${externalServiceId}, 
       user_product_code=${offerCode}, 
       in_life_cycle=${subscriptionStatus}, 
       in_chargin_type=${subscriberLifeCycle}, 
-      in_next_renew_date=${nextBillDate}, 
+      in_next_renew_date=${nextBillDateForDb,}, 
       in_fee=${chargeAmount}, 
       in_reason=${reason}, 
       in_channel_id=${channel}, 
@@ -313,7 +315,7 @@ app.post("/billing-notification", async (req, res) => {
       offerCode,
       subscriptionStatus,
       subscriberLifeCycle,
-      nextBillDate === undefined ? null : nextBillDate,
+      nextBillDateForDb,
       chargeAmount,
       reason,
       channel,
