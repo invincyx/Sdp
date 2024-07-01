@@ -40,17 +40,17 @@ app.get("/test-connection", async (req, res) => {
     console.log("Poll Database running...");
     try {
       const [rows] = await database.query("SELECT * FROM sdp_request WHERE status = ? LIMIT 100", [88]);
-      console.log("Row length: ", rows.length); 
-      console.log(rows);
+      // console.log("Row length: ", rows.length); 
+      // console.log(rows);
       if (rows.length > 0) {
         for (const row of rows) {
-          console.log(row.message); 
+          // console.log(row.message); 
   
   
           const featureId = row.message === "ACTIVATE" ? "Activation" : "Deactivation"; 
   
           try {
-            console.log("Trying to hit SDP...🍀");
+            console.log("Hitting SDP...🍀");
             const hitSdp = await hitSDP({token: token.access_token, request: featureId, requestId: row.trans_id, msisdn: row.sender, planId: row.P_Code })
             console.log(await hitSdp);
   
@@ -164,64 +164,165 @@ app.get("/test-connection", async (req, res) => {
 // });
 
 
+// app.post("/billing-notification", async (req, res) => {
+//   const {
+//     requestId,
+//     requestTimeStamp,
+//     channel,
+//     sourceNode,
+//     sourceAddress,
+//     featureId,
+//     username,
+//     password,
+//     externalServiceId,
+//     requestParam
+//   } = req.body;
+
+//   // Log the billing notification
+//   const notificationLog = `Billing Notification: ${JSON.stringify(req.body)}\n`;
+//   await appendFile('billingNotificationLogs.txt', notificationLog);
+
+//     // Log the billing notification along with any route and query parameters in the console
+//     console.log(`Billing Notification: ${JSON.stringify(req.body)}`);
+//     console.log(`Route Parameters: ${JSON.stringify(req.params)}`);
+//     console.log(`Query Parameters: ${JSON.stringify(req.query)}`);
+
+//   try {
+//     // Define variables to hold the output parameters
+//     let errorCode, errorText;
+
+//     // Call the log_billing_notification procedure
+//     await database.query("SET @p10 = 0, @p11 = ''");
+//     await database.query("CALL log_billing_notification(?, ?, ?, ?, ?, ?, ?, ?, ?, @p10, @p11)", [
+//       requestId,
+//       requestTimeStamp,
+//       channel,
+//       sourceNode,
+//       sourceAddress,
+//       featureId,
+//       username,
+//       password,
+//       externalServiceId,
+//       requestParam
+//     ]);
+//     const rows = await database.query("SELECT @p10 as errorCode, @p11 as errorText");
+
+//     // Get the output parameters
+//     errorCode = rows[0][0].errorCode;
+//     errorText = rows[0][0].errorText;
+
+//     console.log(`Procedure output: errorCode = ${errorCode}, errorText = ${errorText}`);
+
+
+//         // Call the log_billing_notification procedure
+//     // await database.query("SET @p10 = 0, @p11 = ''");
+//     // await database.query("CALL log_billing_notification(?, ?, ?, ?, ?, ?, ?, ?, ?, @p10, @p11)", [
+//     //   user_msisdn,
+//     //   user_product_code,
+//     //   in_life_cycle,
+//     //   in_chargin_type,
+//     //   in_next_renew_date,
+//     //   in_fee,
+//     //   in_reason,
+//     //   in_channel_id,
+//     //   in_time_stamp
+//     // ]);
+//     // const rows = await database.query("SELECT @p10 as errorCode, @p11 as errorText");
+
+//     // // Get the output parameters
+//     // errorCode = rows[0][0].errorCode;
+//     // errorText = rows[0][0].errorText;
+
+//     // console.log(`Procedure output: errorCode = ${errorCode}, errorText = ${errorText}`);
+
+
+
+//     // Create the response packet
+//     const responsePacket = {
+//       requestId,
+//       responseId: requestId, // Assuming the responseId is the same as the requestId
+//       requestTimeStamp,
+//       responseTimeStamp: new Date().toISOString(), // Current timestamp
+//       channel,
+//       featureId,
+//       resultCode: errorCode === 0 ? "0" : "1", // Assuming errorCode 0 means success
+//       resultParam: {
+//         resultCode: errorCode.toString(),
+//         resultDescription: errorText
+//       }
+//     };
+
+//     res.json(responsePacket);
+//   } catch (error) {
+//     console.error(error);
+
+//     // Log the error
+//     await appendFile('errorLogs.txt', `Date: ${new Date().toISOString()} Error: ${JSON.stringify(error)}\n`);
+
+//     res.json({ message: "Failed to process billing notification", error: error.message });
+//   }
+// });
+
+
 app.post("/billing-notification", async (req, res) => {
   const {
     requestId,
     requestTimeStamp,
     channel,
-    sourceNode,
-    sourceAddress,
-    featureId,
-    username,
-    password,
     externalServiceId,
-    requestParam
+    requestParam: {
+      data, // This is the array of data objects
+      planId,
+      command
+    },
+    featureId
   } = req.body;
+
+  // Extract necessary fields from the data array
+  const offerCode = data.find(item => item.name === "OfferCode")?.value;
+  const subscriptionStatus = data.find(item => item.name === "SubscriptionStatus")?.value;
+  const subscriberLifeCycle = data.find(item => item.name === "SubscriberLifeCycle")?.value;
+  const nextBillDate = data.find(item => item.name === "NextBillDate")?.value;
+  const chargeAmount = data.find(item => item.name === "ChargeAmount")?.value;
+  const reason = data.find(item => item.name === "Reason")?.value;
 
   // Log the billing notification
   const notificationLog = `Billing Notification: ${JSON.stringify(req.body)}\n`;
-  await appendFile('billingNotificationLogs.txt', notificationLog);
+  // await appendFile('billingNotificationLogs.txt', notificationLog);
+  await appendFile('billingNotificationLogs.txt', `Date: ${new Date().toISOString()} - ${notificationLog}`);
 
-    // Log the billing notification along with any route and query parameters in the console
-    console.log(`Billing Notification: ${JSON.stringify(req.body)}`);
-    console.log(`Route Parameters: ${JSON.stringify(req.params)}`);
-    console.log(`Query Parameters: ${JSON.stringify(req.query)}`);
+  console.log(`Billing Notification: ${JSON.stringify(req.body)}`);
+  console.log(`Route Parameters: ${JSON.stringify(req.params)}`);
+  console.log(`Query Parameters: ${JSON.stringify(req.query)}`);
 
   try {
-    // Define variables to hold the output parameters
-    let errorCode, errorText;
-
-    // Call the log_billing_notification procedure
-    await database.query("SET @p10 = 0, @p11 = ''");
-    await database.query("CALL log_billing_notification(?, ?, ?, ?, ?, ?, ?, ?, ?, @p10, @p11)", [
-      requestId,
-      requestTimeStamp,
-      channel,
-      sourceNode,
-      sourceAddress,
-      featureId,
-      username,
-      password,
+    await database.query("SET @errorCode = 0, @errorText = ''");
+    await database.query("CALL log_billing_notification(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, @errorCode, @errorText)", [
       externalServiceId,
-      requestParam
+      offerCode,
+      subscriptionStatus,
+      subscriberLifeCycle,
+      nextBillDate,
+      chargeAmount,
+      reason,
+      channel,
+      requestTimeStamp
     ]);
-    const rows = await database.query("SELECT @p10 as errorCode, @p11 as errorText");
+    const rows = await database.query("SELECT @errorCode as errorCode, @errorText as errorText");
 
-    // Get the output parameters
-    errorCode = rows[0][0].errorCode;
-    errorText = rows[0][0].errorText;
+    const errorCode = rows[0][0].errorCode;
+    const errorText = rows[0][0].errorText;
 
     console.log(`Procedure output: errorCode = ${errorCode}, errorText = ${errorText}`);
 
-    // Create the response packet
     const responsePacket = {
       requestId,
-      responseId: requestId, // Assuming the responseId is the same as the requestId
+      responseId: requestId,
       requestTimeStamp,
-      responseTimeStamp: new Date().toISOString(), // Current timestamp
+      responseTimeStamp: new Date().toISOString(),
       channel,
       featureId,
-      resultCode: errorCode === 0 ? "0" : "1", // Assuming errorCode 0 means success
+      resultCode: errorCode === 7 ? "0" : "1", // Assuming errorCode 7 means success in this context
       resultParam: {
         resultCode: errorCode.toString(),
         resultDescription: errorText
@@ -231,14 +332,9 @@ app.post("/billing-notification", async (req, res) => {
     res.json(responsePacket);
   } catch (error) {
     console.error(error);
-
-    // Log the error
     await appendFile('errorLogs.txt', `Date: ${new Date().toISOString()} Error: ${JSON.stringify(error)}\n`);
-
     res.json({ message: "Failed to process billing notification", error: error.message });
   }
 });
-
-
 
 
