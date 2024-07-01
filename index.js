@@ -297,7 +297,7 @@ app.post("/billing-notification", async (req, res) => {
 
   try {
     await database.query("SET @errorCode = 0, @errorText = ''");
-    await database.query("CALL log_billing_notification(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, @errorCode, @errorText)", [
+    await database.query("CALL log_billing_notification(?, ?, ?, ?, ?, ?, ?, ?, ?, @errorCode, @errorText)", [
       externalServiceId,
       offerCode,
       subscriptionStatus,
