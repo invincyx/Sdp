@@ -37,7 +37,7 @@ app.get("/test-connection", async (req, res) => {
 
   async function pollDatabase() {
     const token = await getToken();
-    console.log("Poll Database running...");
+    // console.log("Poll Database running...");
     try {
       const [rows] = await database.query("SELECT * FROM sdp_request WHERE status = ? LIMIT 100", [88]);
       // console.log("Row length: ", rows.length); 
@@ -297,6 +297,8 @@ app.post("/billing-notification", async (req, res) => {
 
   try {
     await database.query("SET @errorCode = 0, @errorText = ''");
+    console.log(`Calling log_billing_notification with parameters: externalServiceId=${externalServiceId}, offerCode=${offerCode}, subscriptionStatus=${subscriptionStatus}, subscriberLifeCycle=${subscriberLifeCycle}, nextBillDate=${nextBillDate}, chargeAmount=${chargeAmount}, reason=${reason}, channel=${channel}, requestTimeStamp=${requestTimeStamp}`);
+
     await database.query("CALL log_billing_notification(?, ?, ?, ?, ?, ?, ?, ?, ?, @errorCode, @errorText)", [
       externalServiceId,
       offerCode,

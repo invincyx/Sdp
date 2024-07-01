@@ -53,4 +53,4 @@ try {
 }
 
 
-getToken().then(console.log).catch(console.error);
+// getToken().then(console.log).catch(console.error);
