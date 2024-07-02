@@ -49,7 +49,7 @@ app.get("/test-connection", async (req, res) => {
 
       // select * from SDP_Request;
       // console.log("Row length: ", rows.length); 
-      console.log(`${now} ~ `,rows);
+      // console.log(`${now} ~ `,rows);
       if (rows.length > 0) {
         for (const row of rows) {
           // console.log(row.message); 
