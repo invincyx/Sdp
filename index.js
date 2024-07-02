@@ -14,15 +14,15 @@ const port = 3000;
 app.use(express.json());
 
 
+
 app.listen(port, () => {
-    console.log(`Server started on ${port}`);
+    console.log(`${new Date().toISOString()} ~ Server started on ${port}`);
 });
+
 
 
 // ✨✨✨ Test connection to the database
 app.get("/test-connection", async (req, res) => {
-    // const token = await getToken();
-    // console.log(token);
 
     try {
       await database.query("SELECT 1");
@@ -36,14 +36,20 @@ app.get("/test-connection", async (req, res) => {
   // ✨✨✨Poll the database for new requests with status 88
 
   async function pollDatabase() {
+    const now = new Date().toISOString()
+
     const token = await getToken();
     // console.log("Poll Database running...");
     try {
+
+      
       // const [rows] = await database.query("SELECT * FROM sdp_request WHERE status = ? LIMIT 100", [88]);
       const [rows] = await database.query("select * from SDP_Request");
+
+
       // select * from SDP_Request;
-      console.log("Row length: ", rows.length); 
-      console.log(rows);
+      // console.log("Row length: ", rows.length); 
+      // console.log(rows);
       if (rows.length > 0) {
         for (const row of rows) {
           // console.log(row.message); 
@@ -53,9 +59,9 @@ app.get("/test-connection", async (req, res) => {
   
           try {
             console.log("\n\n ✨✨✨", new Date().toISOString())
-            console.log("Hitting SDP...🍀");
+            console.log(`${now} ~ Hitting SDP...🍀`);
             const hitSdp = await hitSDP({token: token.access_token, request: featureId, requestId: row.trans_id, msisdn: row.sender, planId: row.P_Code })
-            console.log(await hitSdp);
+            console.log(`${now} ~ `,await hitSdp);
   
             // Log the billing hit
             // await fs.appendFile('billingHits.txt', `Date: ${new Date().toISOString()} Billing Hit: ${JSON.stringify(hitSdp)}\n`);
@@ -63,7 +69,7 @@ app.get("/test-connection", async (req, res) => {
             // Update status based on the result code
             const resultCode = await hitSdp.resultCode === "0" ? 11 : hitSdp.resultCode;
 
-            console.log("🌍  Result code: ", await resultCode);
+            console.log(`${now} ~ 🌍  Result code: ,`, await resultCode);
   
             // Declare the output variable
             await database.query("SET @output = ''");
@@ -114,161 +120,6 @@ app.get("/test-connection", async (req, res) => {
   setInterval(pollDatabase, 60000);
 
 
-//✨✨✨ Url for Billing Notification
-// app.get("/billing-notification", async (req, res) => {
-//   const {
-//     user_msisdn,
-//     user_product_code,
-//     in_life_cycle,
-//     in_chargin_type,
-//     in_next_renew_date,
-//     in_fee,
-//     in_reason,
-//     in_channel_id,
-//     in_time_stamp
-//   } = req.query;
-
-//   // Log the billing notification
-//   const notificationLog = `Billing Notification: ${JSON.stringify(req.body)}\n`;
-//   await appendFile('billingNotificationLogs.txt', notificationLog);
-
-//   try {
-//     // Define variables to hold the output parameters
-//     let errorCode, errorText;
-
-//     // Call the log_billing_notification procedure
-//     await database.query("SET @p10 = 0, @p11 = ''");
-//     await database.query("CALL log_billing_notification(?, ?, ?, ?, ?, ?, ?, ?, ?, @p10, @p11)", [
-//       user_msisdn,
-//       user_product_code,
-//       in_life_cycle,
-//       in_chargin_type,
-//       in_next_renew_date,
-//       in_fee,
-//       in_reason,
-//       in_channel_id,
-//       in_time_stamp
-//     ]);
-//     const rows = await database.query("SELECT @p10 as errorCode, @p11 as errorText");
-
-//     // Get the output parameters
-//     errorCode = rows[0][0].errorCode;
-//     errorText = rows[0][0].errorText;
-
-//     console.log(`Procedure output: errorCode = ${errorCode}, errorText = ${errorText}`);
-
-//     res.json({ message: "Billing notification processed successfully", errorCode, errorText });
-//   } catch (error) {
-//     console.error(error);
-
-//     // Log the error
-//     await appendFile('errorLogs.txt', `Date: ${new Date().toISOString()} Error: ${JSON.stringify(error)}\n`);
-
-//     res.json({ message: "Failed to process billing notification", error: error.message });
-//   }
-// });
-
-
-// app.post("/billing-notification", async (req, res) => {
-//   const {
-//     requestId,
-//     requestTimeStamp,
-//     channel,
-//     sourceNode,
-//     sourceAddress,
-//     featureId,
-//     username,
-//     password,
-//     externalServiceId,
-//     requestParam
-//   } = req.body;
-
-//   // Log the billing notification
-//   const notificationLog = `Billing Notification: ${JSON.stringify(req.body)}\n`;
-//   await appendFile('billingNotificationLogs.txt', notificationLog);
-
-//     // Log the billing notification along with any route and query parameters in the console
-//     console.log(`Billing Notification: ${JSON.stringify(req.body)}`);
-//     console.log(`Route Parameters: ${JSON.stringify(req.params)}`);
-//     console.log(`Query Parameters: ${JSON.stringify(req.query)}`);
-
-//   try {
-//     // Define variables to hold the output parameters
-//     let errorCode, errorText;
-
-//     // Call the log_billing_notification procedure
-//     await database.query("SET @p10 = 0, @p11 = ''");
-//     await database.query("CALL log_billing_notification(?, ?, ?, ?, ?, ?, ?, ?, ?, @p10, @p11)", [
-//       requestId,
-//       requestTimeStamp,
-//       channel,
-//       sourceNode,
-//       sourceAddress,
-//       featureId,
-//       username,
-//       password,
-//       externalServiceId,
-//       requestParam
-//     ]);
-//     const rows = await database.query("SELECT @p10 as errorCode, @p11 as errorText");
-
-//     // Get the output parameters
-//     errorCode = rows[0][0].errorCode;
-//     errorText = rows[0][0].errorText;
-
-//     console.log(`Procedure output: errorCode = ${errorCode}, errorText = ${errorText}`);
-
-
-//         // Call the log_billing_notification procedure
-//     // await database.query("SET @p10 = 0, @p11 = ''");
-//     // await database.query("CALL log_billing_notification(?, ?, ?, ?, ?, ?, ?, ?, ?, @p10, @p11)", [
-//     //   user_msisdn,
-//     //   user_product_code,
-//     //   in_life_cycle,
-//     //   in_chargin_type,
-//     //   in_next_renew_date,
-//     //   in_fee,
-//     //   in_reason,
-//     //   in_channel_id,
-//     //   in_time_stamp
-//     // ]);
-//     // const rows = await database.query("SELECT @p10 as errorCode, @p11 as errorText");
-
-//     // // Get the output parameters
-//     // errorCode = rows[0][0].errorCode;
-//     // errorText = rows[0][0].errorText;
-
-//     // console.log(`Procedure output: errorCode = ${errorCode}, errorText = ${errorText}`);
-
-
-
-//     // Create the response packet
-//     const responsePacket = {
-//       requestId,
-//       responseId: requestId, // Assuming the responseId is the same as the requestId
-//       requestTimeStamp,
-//       responseTimeStamp: new Date().toISOString(), // Current timestamp
-//       channel,
-//       featureId,
-//       resultCode: errorCode === 0 ? "0" : "1", // Assuming errorCode 0 means success
-//       resultParam: {
-//         resultCode: errorCode.toString(),
-//         resultDescription: errorText
-//       }
-//     };
-
-//     res.json(responsePacket);
-//   } catch (error) {
-//     console.error(error);
-
-//     // Log the error
-//     await appendFile('errorLogs.txt', `Date: ${new Date().toISOString()} Error: ${JSON.stringify(error)}\n`);
-
-//     res.json({ message: "Failed to process billing notification", error: error.message });
-//   }
-// });
-
-
 app.post("/billing-notification", async (req, res) => {
   const {
     requestId,
@@ -283,6 +134,7 @@ app.post("/billing-notification", async (req, res) => {
     featureId
   } = req.body;
 
+  const now = new Date().toISOString()
   // Extract necessary fields from the data array
   const offerCode = data.find(item => item.name === "OfferCode")?.value;
   const subscriptionStatus = data.find(item => item.name === "SubscriptionStatus")?.value;
@@ -296,15 +148,15 @@ app.post("/billing-notification", async (req, res) => {
   // await appendFile('billingNotificationLogs.txt', notificationLog);
   await appendFile('billingNotificationLogs.txt', `Date: ${new Date().toISOString()} - ${notificationLog}`);
 
-  console.log(`Billing Notification: ${JSON.stringify(req.body)}`);
-  console.log(`Route Parameters: ${JSON.stringify(req.params)}`);
-  console.log(`Query Parameters: ${JSON.stringify(req.query)}`);
+  console.log(`${now} ~ Billing Notification: ${JSON.stringify(req.body)}`);
+  console.log(`${now} ~ Route Parameters: ${JSON.stringify(req.params)}`);
+  console.log(`${now} ~ Query Parameters: ${JSON.stringify(req.query)}`);
 
   try {
     await database.query("SET @errorCode = 0, @errorText = ''");
     // Ensure nextBillDate is set to null if it's undefined before logging and database call
 const nextBillDateForDb = nextBillDate === undefined ? null : nextBillDate;
-    console.log(`Calling log_billing_notification with parameters: 
+    console.log(`${now} ~ Calling log_billing_notification with parameters: 
       user_msisdn=${externalServiceId}, 
       user_product_code=${offerCode}, 
       in_life_cycle=${subscriptionStatus}, 
@@ -331,7 +183,7 @@ const nextBillDateForDb = nextBillDate === undefined ? null : nextBillDate;
     const errorCode = rows[0][0].errorCode;
     const errorText = rows[0][0].errorText;
 
-    console.log(`Procedure output: errorCode = ${errorCode}, errorText = ${errorText}`);
+    console.log(`${now} ~ Procedure output: errorCode = ${errorCode}, errorText = ${errorText}`);
 
     const responsePacket = {
       requestId,
@@ -351,7 +203,7 @@ const nextBillDateForDb = nextBillDate === undefined ? null : nextBillDate;
   } catch (error) {
     console.error(error);
     await appendFile('errorLogs.txt', `Date: ${new Date().toISOString()} Error: ${JSON.stringify(error)}\n`);
-    res.json({ message: "Failed to process billing notification", error: error.message });
+    res.json({ message: `${new Date().toISOString()} ~ Failed to process billing notification`, error: error.message });
   }
 });
 
