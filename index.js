@@ -201,7 +201,7 @@ const nextBillDateForDb = nextBillDate === undefined ? null : nextBillDate;
 
     res.json(responsePacket);
   } catch (error) {
-    console.error(error);
+    console.error(`\n\n\n ✨✨✨ ------- \n\n\n Date: ${new Date().toISOString()} ~ Error: ${JSON.stringify(error)}\n`);
     await appendFile('errorLogs.txt', `Date: ${new Date().toISOString()} Error: ${JSON.stringify(error)}\n`);
     res.json({ message: `${new Date().toISOString()} ~ Failed to process billing notification`, error: error.message });
   }
