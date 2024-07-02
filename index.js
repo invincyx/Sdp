@@ -39,9 +39,11 @@ app.get("/test-connection", async (req, res) => {
     const token = await getToken();
     // console.log("Poll Database running...");
     try {
-      const [rows] = await database.query("SELECT * FROM sdp_request WHERE status = ? LIMIT 100", [88]);
-      // console.log("Row length: ", rows.length); 
-      // console.log(rows);
+      // const [rows] = await database.query("SELECT * FROM sdp_request WHERE status = ? LIMIT 100", [88]);
+      const [rows] = await database.query("select * from SDP_Request");
+      // select * from SDP_Request;
+      console.log("Row length: ", rows.length); 
+      console.log(rows);
       if (rows.length > 0) {
         for (const row of rows) {
           // console.log(row.message); 
@@ -50,6 +52,7 @@ app.get("/test-connection", async (req, res) => {
           const featureId = row.message === "ACTIVATE" ? "Activation" : "Deactivation"; 
   
           try {
+            console.log("\n\n ✨✨✨", new Date().toISOString())
             console.log("Hitting SDP...🍀");
             const hitSdp = await hitSDP({token: token.access_token, request: featureId, requestId: row.trans_id, msisdn: row.sender, planId: row.P_Code })
             console.log(await hitSdp);
@@ -77,6 +80,7 @@ app.get("/test-connection", async (req, res) => {
             const result = await database.query("SELECT @output as output");
             console.log(result);
           } catch (error) {
+            console.log("\n\n ✨✨✨", new Date().toISOString())
             console.log("🍀 Error: ", error);
             console.error(error);
 
@@ -100,6 +104,7 @@ app.get("/test-connection", async (req, res) => {
         }
       }
     } catch (error) { 
+      console.log("\n\n ✨✨✨", new Date().toISOString())
       const date = new Date();
       console.log("🍀 Error Catch Block: ", error);
       await appendFile('dblogs.txt', `Date: ${date.toISOString()} Error: ${JSON.stringify(error)}\n`);
