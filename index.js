@@ -146,7 +146,7 @@ app.post("/billing-notification", async (req, res) => {
   // Log the billing notification
   const notificationLog = `Billing Notification: ${JSON.stringify(req.body)}\n`;
   // await appendFile('billingNotificationLogs.txt', notificationLog);
-  await appendFile('billingNotificationLogs.txt', `Date: ${new Date().toISOString()} - ${notificationLog}`);
+  await appendFile('billingNotificationLogs.txt', `\n\n\n ✨✨✨ Date: ${new Date().toISOString()} ~ ${notificationLog}`);
 
   console.log(`${now} ~ Billing Notification: ${JSON.stringify(req.body)}`);
   console.log(`${now} ~ Route Parameters: ${JSON.stringify(req.params)}`);
